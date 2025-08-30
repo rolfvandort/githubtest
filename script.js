@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const parseJurisprudenceEntry = (entry) => {
         const titleText = entry.querySelector('title')?.textContent || '';
-        const match = titleText.match(/ECLI:NL:[^,]+,([^,]+)(\d{4}-\d{2}-\d{2})/);
+        const match = titleText.match(/ECLI:NL:[^,]+,\s*(.*?),\s*(\d{4}-\d{2}-\d{2})/);
         const instantie = match ? match[1].trim() : 'Onbekende instantie';
         const dateString = match ? match[2] : '';
         const formattedDate = dateString ? new Date(dateString).toLocaleDateString('nl-NL') : 'Onbekende datum';
