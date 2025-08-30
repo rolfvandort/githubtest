@@ -222,17 +222,18 @@
 
                 <div class="dashboard-card">
                     <div class="card-header">
-                        <h3> Wettenbank Zoeker</h3>
+                        <h3><span class="header-icon">🏛️</span> Wettenbank Zoeker (SRU 2.0)</h3>
                     </div>
                     <div class="card-body">
                         <div class="filter-group">
                             <label for="wettenbankKeyword">Zoeken op trefwoord:</label>
                             <div class="search-input-container">
-                                <input type="text" id="wettenbankKeyword" placeholder="Trefwoord" class="filter-input">
-                                <button class="primary-button" id="wettenbankSearchButton">Zoek in Wettenbank</button>
+                                <input type="text" id="wettenbankKeyword" placeholder="bv. bestemmingsplan" class="filter-input">
+                                <button class="primary-button" id="wettenbankSearchButton">Zoek</button>
                             </div>
                         </div>
                         <div id="wettenbankStatus" class="status-message"></div>
+                        <div id="wettenbankFacets" class="facet-container"></div>
                         <div id="wettenbankResults" class="results-container"></div>
                     </div>
                 </div>
