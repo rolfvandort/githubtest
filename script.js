@@ -314,20 +314,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const parseJurisprudenceEntry = (entry) => {
-        const titleText = entry.querySelector('title')?.textContent || '';
-        const match = titleText.match(/ECLI:NL:[^,]+,\s*(.*?),\s*(\d{4}-\d{2}-\d{2})/);
-        const instantie = match ? match[1].trim() : 'Onbekende instantie';
-        const dateString = match ? match[2] : '';
-        const formattedDate = dateString ? new Date(dateString).toLocaleDateString('nl-NL') : 'Onbekende datum';
+const parseJurisprudenceEntry = (entry) => {
+        // Haal de datum uit het <updated> veld, dit is betrouwbaarder
+        const updatedDate = entry.querySelector('updated')?.textContent || '';
+        const dateObject = new Date(updatedDate);
+        const formattedDate = !isNaN(dateObject) ? dateObject.toLocaleDateString('nl-NL') : 'Onbekende datum';
 
         return {
-            title: `${instantie}, ${formattedDate}`,
+            title: entry.querySelector('title')?.textContent || 'Geen titel beschikbaar', // Gebruik de titel direct
             ecli: entry.querySelector('id')?.textContent || '',
             summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting beschikbaar.',
             link: entry.querySelector('link')?.getAttribute('href') || '#',
-            instantie: instantie,
-            datum: formattedDate
+            datum: formattedDate,
+            dateObject: dateObject // Belangrijk voor het sorteren straks!
         };
     };
 
