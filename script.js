@@ -706,12 +706,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const baseUrl = 'https://repository.overheid.nl/sru/Search';
-        const targetUrl = `${baseUrl}?${params.toString()}`;
-        const requestUrl = `${PROXY_URL}${encodeURIComponent(targetUrl)}`;
+        const requestUrl = `${PROXY_URL}${baseUrl}`;
 
         try {
-            const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status}`);
+            const response = await fetch(requestUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params
+            });
+            
+            if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status} ${response.statusText}`);
 
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
@@ -779,7 +785,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const index = facet.querySelector('index')?.textContent;
             const terms = facet.querySelectorAll('term');
             
-            // Map index names to user-friendly titles
             const titleMap = {
                 'w.organisatietype': 'Organisatie Type',
                 'dt.type': 'Document Type'
@@ -805,12 +810,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const query = target.dataset.facetQuery;
             const index = target.dataset.facetIndex;
             
-            // Toggle facet selection
             if(wettenbankActiveFacets[index] === query) {
                 delete wettenbankActiveFacets[index];
                 target.classList.remove('active');
             } else {
-                 // Deselect previous active link in the same group
                 const currentActive = e.currentTarget.querySelector(`a[data-facet-index="${index}"].active`);
                 if(currentActive) currentActive.classList.remove('active');
                 
@@ -818,7 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 target.classList.add('active');
             }
 
-            handleWettenbankSearch(false); // Re-run search without fetching new facets
+            handleWettenbankSearch(false);
         }
     };
 
