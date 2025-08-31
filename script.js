@@ -314,19 +314,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-const parseJurisprudenceEntry = (entry) => {
-        // Haal de datum uit het <updated> veld, dit is betrouwbaarder
-        const updatedDate = entry.querySelector('updated')?.textContent || '';
-        const dateObject = new Date(updatedDate);
-        const formattedDate = !isNaN(dateObject) ? dateObject.toLocaleDateString('nl-NL') : 'Onbekende datum';
+    const parseJurisprudenceEntry = (entry) => {
+        const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel beschikbaar';
+        const updatedDateRaw = entry.querySelector('updated')?.textContent || '';
+        const dateObject = new Date(updatedDateRaw);
+        const lastModifiedDate = !isNaN(dateObject) ? dateObject.toLocaleDateString('nl-NL') : 'Onbekende datum';
+
+        let ecliFromTitle = '';
+        let instantie = '';
+        let uitspraakdatum = '';
+
+        const parts = fullTitle.split(',');
+        if (parts.length > 1) {
+            ecliFromTitle = parts[0].trim();
+            const rest = parts.slice(1).join(',').trim();
+            
+            // Probeer de datum aan het einde te vinden
+            const dateMatch = rest.match(/(\d{4}-\d{2}-\d{2})$/);
+            if (dateMatch) {
+                uitspraakdatum = new Date(dateMatch[1]).toLocaleDateString('nl-NL');
+                instantie = rest.substring(0, dateMatch.index).trim();
+            } else {
+                instantie = rest; // Als er geen datum is, is alles instantie
+            }
+        } else {
+            ecliFromTitle = fullTitle; // Fallback
+        }
 
         return {
-            title: entry.querySelector('title')?.textContent || 'Geen titel beschikbaar', // Gebruik de titel direct
-            ecli: entry.querySelector('id')?.textContent || '',
+            title: fullTitle,
+            ecli: entry.querySelector('id')?.textContent || ecliFromTitle,
+            instantie: instantie,
+            uitspraakdatum: uitspraakdatum,
             summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting beschikbaar.',
             link: entry.querySelector('link')?.getAttribute('href') || '#',
-            datum: formattedDate,
-            dateObject: dateObject // Belangrijk voor het sorteren straks!
+            laatstGewijzigd: lastModifiedDate,
+            dateObject: dateObject // Voor sortering op wijzigingsdatum
         };
     };
 
@@ -460,8 +483,16 @@ const parseJurisprudenceEntry = (entry) => {
         elements.jurisprudenceResults.innerHTML = '';
         jurisprudenceCurrentResults.forEach((item, index) => {
             elements.jurisprudenceResults.innerHTML += createResultItemHTML(
-                'jurisprudence', item.title, item.link, item.summary,
-                { "Uitspraakdatum": item.datum, "ECLI": item.ecli },
+                'jurisprudence', 
+                item.title, 
+                item.link, 
+                item.summary,
+                { 
+                    "ECLI": item.ecli,
+                    "Instantie": item.instantie,
+                    "Uitspraakdatum": item.uitspraakdatum,
+                    "Laatst gewijzigd": item.laatstGewijzigd
+                },
                 `jurisprudence-${index}`
             );
         });
@@ -507,7 +538,9 @@ const parseJurisprudenceEntry = (entry) => {
     };
 
     const createResultItemHTML = (type, title, link, content, meta, index) => {
-        const metaHTML = Object.entries(meta).map(([key, value]) => `<span><strong>${key}:</strong> ${value || 'n.v.t.'}</span>`).join('');
+        const metaHTML = Object.entries(meta)
+            .filter(([, value]) => value) // Filter out empty or null values
+            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
         
         const summaryText = content.substring(0, 300) + (content.length > 300 ? '...' : '');
         
