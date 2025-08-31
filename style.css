@@ -474,6 +474,20 @@ body {
 .secondary-button:hover:not(:disabled) { background-color: var(--secondary-orange-dark); transform: translateY(-1px); }
 .tertiary-button { background-color: transparent; color: var(--text-color); border: 1px solid var(--card-border); }
 .tertiary-button:hover:not(:disabled) { background-color: var(--light-gray); border-color: var(--medium-gray); }
+.details-toggle-button, .read-more-button {
+    background: none;
+    border: none;
+    color: var(--primary-blue);
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 8px;
+}
+.details-toggle-button:hover, .read-more-button:hover {
+    text-decoration: underline;
+}
+
 
 .button-icon { font-size: 1.1em; }
 
@@ -525,22 +539,37 @@ body {
     justify-content: space-between;
 }
 .result-item:last-child { border-bottom: none; }
-.result-item:hover { background-color: var(--light-gray); }
+.result-item:hover { background-color: #f8f9faF5; }
 
 .result-item-header { margin-bottom: 8px; }
-.result-item-header h3 { margin: 0; font-size: 1.2rem; line-height: 1.4; }
+.result-item-header h3 { margin: 0; font-size: 1.1rem; line-height: 1.4; }
 .result-item-header h3 a { text-decoration: none; color: var(--primary-blue); font-weight: 600; transition: var(--transition); }
 .result-item-header h3 a:hover { text-decoration: underline; color: var(--primary-blue-dark); }
 
 .meta-info { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 8px 16px; padding-left: 2px; }
 .meta-info span { display: flex; align-items: center; gap: 6px; }
 .meta-info strong { color: var(--text-color); font-weight: 600; }
+.detailed-meta-info {
+    display: none;
+    background-color: var(--light-gray);
+    border-radius: var(--border-radius);
+    padding: 12px;
+    margin-top: 12px;
+    animation: fadeIn 0.3s;
+}
+.result-item.details-visible .detailed-meta-info {
+    display: block;
+}
+
 
 .summary { 
     font-size: 0.95rem; 
     color: var(--text-color); 
     line-height: 1.6;
-    flex-grow: 1; 
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
 }
 .summary.expanded { 
     -webkit-line-clamp: unset;
@@ -765,4 +794,3 @@ body {
     width: auto;
     margin-top: 8px;
 }
-
