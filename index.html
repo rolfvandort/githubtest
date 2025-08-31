@@ -113,8 +113,10 @@
                                      <div class="filter-group">
                                         <label for="sortOrder">Sortering</label>
                                         <select id="sortOrder" class="filter-input">
-                                            <option value="DESC" selected>Nieuwste eerst</option>
-                                            <option value="ASC">Oudste eerst</option>
+                                            <option value="DESC" selected>Nieuwste eerst (publicatie)</option>
+                                            <option value="ASC">Oudste eerst (publicatie)</option>
+                                            <option value="date-desc">Nieuwste eerst (uitspraak)</option>
+                                            <option value="date-asc">Oudste eerst (uitspraak)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -131,7 +133,8 @@
                         </div>
                         
                         <div id="resultsHeader" class="results-header" style="display: none;">
-                            <span id="totalResultsText"></span>
+                            <div id="totalResultsText"></div>
+                            <div id="activeFilters" class="active-filters-container"></div>
                         </div>
 
                         <div id="smartSearchSection" class="smart-search-section hidden">
