@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                      showStatus(elements.jurisprudenceStatus, 'Geen resultaten gevonden voor deze criteria.', 'warning');
                      elements.jurisprudenceResults.innerHTML = '';
                      elements.jurisprudencePagination.innerHTML = '';
-                     showLoading(false);
+                     showLoading(false); // **FIX: Stop loading indicator**
                      return;
                 }
             }
@@ -356,11 +356,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 dateObject = new Date(dateMatch[1]);
                 uitspraakdatum = dateObject.toLocaleDateString('nl-NL');
                 
-                const zaakMatch = dateZaakPart.split('/');
-                if (zaakMatch.length > 1) {
-                    zaaknummer = zaakMatch[1].trim();
+                const zaakSplit = dateZaakPart.split('/');
+                if (zaakSplit.length > 1) {
+                    zaaknummer = zaakSplit.slice(1).join('/').trim();
+                } else {
+                    // Fallback for titles without a clear '/' separator for zaaknummer
+                    zaaknummer = dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
                 }
             }
+        } else if (parts.length === 2) {
+             // Handle cases like "ECLI:..., Rechtbank..."
+             instantie = parts[1];
         }
     
         return {
@@ -413,14 +419,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleSortChange = () => {
         const sortValue = elements.sortOrder.value;
         if (sortValue === 'ASC' || sortValue === 'DESC') {
-             // Sortering door API: als er al resultaten zijn, forceer een nieuwe zoekopdracht.
             if (jurisprudenceMasterResults.length > 0) {
                 handleJurisprudenceSearch(true);
             }
             return;
         }
 
-        // Client-side sortering op uitspraakdatum
         jurisprudenceMasterResults.sort((a, b) => {
             const dateA = a.dateObject;
             const dateB = b.dateObject;
@@ -431,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return 0;
         });
         
-        handleSmartSearch(); // Her-filter en render de resultaten in de nieuwe volgorde
+        handleSmartSearch();
     };
     
     // --- WETTENBANK SEARCH (SRU 2.0) ---
@@ -597,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const createResultItemHTML = (type, title, link, content, meta, index) => {
         const metaHTML = Object.entries(meta)
-            .filter(([, value]) => value && value !== 'N/A')
+            .filter(([, value]) => value && value.trim() !== 'N/A' && value.trim() !== '')
             .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
         
         const summaryNeedsToggle = content.length > 350;
@@ -780,7 +784,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const showLoading = (show, isNewSearch = false) => {
         elements.loadingIndicator.style.display = show ? 'flex' : 'none'; 
         
-        // Disable the correct button based on the action
         if (isNewSearch) {
             elements.apiSearchButton.disabled = show;
             elements.apiSearchButton.innerHTML = show 
