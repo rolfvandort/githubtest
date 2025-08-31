@@ -43,6 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "Gerechtshof 's-Hertogenbosch", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_'s-Hertogenbosch" }
     ];
 
+    const zittingsplaatsen = {
+        'UTR': 'Utrecht', 'AMS': 'Amsterdam', 'HAA': 'Haarlem', 'ROT': 'Rotterdam',
+        'DHA': 'Den Haag', 'SHE': 's-Hertogenbosch', 'ARN': 'Arnhem', 'LEE': 'Leeuwarden'
+        // Voeg hier eventueel meer codes toe
+    };
+
     // --- DOM ELEMENTEN ---
     const elements = {
         mainContainer: document.getElementById('mainContainer'),
@@ -54,10 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
         quickSearchButton: document.getElementById('quickSearchButton'),
         periodPreset: document.getElementById('periodPreset'),
         customDateRange: document.getElementById('customDateRange'),
+        dateFilterType: document.getElementById('dateFilterType'),
         dateFrom: document.getElementById('dateFrom'),
         dateTo: document.getElementById('dateTo'),
-        modifiedFrom: document.getElementById('modifiedFrom'),
-        modifiedTo: document.getElementById('modifiedTo'),
         subject: document.getElementById('subject'),
         procedure: document.getElementById('procedure'),
         sortOrder: document.getElementById('sortOrder'),
@@ -181,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.querySelector('input[name="documentType"][value=""]').checked = true;
         elements.sortOrder.value = 'DESC';
+        elements.dateFilterType.value = 'uitspraakdatum';
         elements.quickSearchInput.value = '';
         elements.creator.removeAttribute('data-id');
         elements.customDateRange.style.display = 'none';
@@ -252,10 +258,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const buildJurisprudenceParams = (isNewSearch, from = 0) => {
         if (isNewSearch) {
             const params = new URLSearchParams();
-            if (elements.dateFrom.value) params.append('date', elements.dateFrom.value);
-            if (elements.dateTo.value) params.append('date', elements.dateTo.value);
-            if (elements.modifiedFrom.value) params.append('modified', `${elements.modifiedFrom.value}T00:00:00`);
-            if (elements.modifiedTo.value) params.append('modified', `${elements.modifiedTo.value}T23:59:59`);
+            const dateType = elements.dateFilterType.value;
+
+            if (dateType === 'uitspraakdatum') {
+                if (elements.dateFrom.value) params.append('date', elements.dateFrom.value);
+                if (elements.dateTo.value) params.append('date', elements.dateTo.value);
+            } else if (dateType === 'wijzigingsdatum') {
+                if (elements.dateFrom.value) params.append('modified', `${elements.dateFrom.value}T00:00:00`);
+                if (elements.dateTo.value) params.append('modified', `${elements.dateTo.value}T23:59:59`);
+            }
+
             if (elements.subject.value) params.append('subject', elements.subject.value);
             if (elements.procedure.value) params.append('procedure', elements.procedure.value);
             if (elements.creator.dataset.id) params.append('creator', elements.creator.dataset.id);
@@ -316,40 +328,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const parseJurisprudenceEntry = (entry) => {
         const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel beschikbaar';
-        const updatedDateRaw = entry.querySelector('updated')?.textContent || '';
-        const dateObject = new Date(updatedDateRaw);
-        const lastModifiedDate = !isNaN(dateObject) ? dateObject.toLocaleDateString('nl-NL') : 'Onbekende datum';
+        const ecli = entry.querySelector('id')?.textContent || '';
 
-        let ecliFromTitle = '';
-        let instantie = '';
-        let uitspraakdatum = '';
+        // Regex to capture the different parts of the title
+        const titleRegex = /^(ECLI:NL:[A-Z]{2,5}:\d{4}:[^,]+),\s(.*?),\s(\d{4}-\d{2}-\d{2})\s\/\s(.+)$/;
+        const match = fullTitle.match(titleRegex);
 
-        const parts = fullTitle.split(',');
-        if (parts.length > 1) {
-            ecliFromTitle = parts[0].trim();
-            const rest = parts.slice(1).join(',').trim();
+        let instantie = 'N/A';
+        let uitspraakdatum = 'N/A';
+        let zaaknummer = 'N/A';
+        let zittingsplaats = '';
+        let dateObject = null;
+
+        if (match) {
+            instantie = match[2].trim();
+            uitspraakdatum = new Date(match[3]).toLocaleDateString('nl-NL');
+            zaaknummer = match[4].trim();
+            dateObject = new Date(match[3]);
             
-            // Probeer de datum aan het einde te vinden
-            const dateMatch = rest.match(/(\d{4}-\d{2}-\d{2})$/);
-            if (dateMatch) {
-                uitspraakdatum = new Date(dateMatch[1]).toLocaleDateString('nl-NL');
-                instantie = rest.substring(0, dateMatch.index).trim();
-            } else {
-                instantie = rest; // Als er geen datum is, is alles instantie
+            // Try to find zittingsplaats from zaaknummer
+            const zaakNrParts = zaaknummer.split(/[-_ ]/);
+            const potentialZittingsplaats = zittingsplaatsen[zaakNrParts[0].toUpperCase()];
+            if (potentialZittingsplaats) {
+                zittingsplaats = potentialZittingsplaats;
             }
-        } else {
-            ecliFromTitle = fullTitle; // Fallback
         }
 
         return {
             title: fullTitle,
-            ecli: entry.querySelector('id')?.textContent || ecliFromTitle,
+            ecli: ecli,
             instantie: instantie,
             uitspraakdatum: uitspraakdatum,
+            zaaknummer: zaaknummer,
+            zittingsplaats: zittingsplaats,
             summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting beschikbaar.',
             link: entry.querySelector('link')?.getAttribute('href') || '#',
-            laatstGewijzigd: lastModifiedDate,
-            dateObject: dateObject // Voor sortering op wijzigingsdatum
+            dateObject: dateObject // Belangrijk voor het sorteren!
         };
     };
 
@@ -487,11 +501,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.title, 
                 item.link, 
                 item.summary,
-                { 
+                {
                     "ECLI": item.ecli,
                     "Instantie": item.instantie,
                     "Uitspraakdatum": item.uitspraakdatum,
-                    "Laatst gewijzigd": item.laatstGewijzigd
+                    "Zaaknummer(s)": item.zaaknummer,
+                    "Zittingsplaats": item.zittingsplaats
                 },
                 `jurisprudence-${index}`
             );
@@ -538,27 +553,36 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const createResultItemHTML = (type, title, link, content, meta, index) => {
-        const metaHTML = Object.entries(meta)
-            .filter(([, value]) => value) // Filter out empty or null values
+        const metaVisibleHTML = Object.entries(meta)
+            .filter(([key]) => ['ECLI', 'Instantie', 'Uitspraakdatum'].includes(key))
+            .filter(([, value]) => value)
+            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
+
+        const metaHiddenHTML = Object.entries(meta)
+            .filter(([key]) => ['Zaaknummer(s)', 'Zittingsplaats'].includes(key))
+            .filter(([, value]) => value)
             .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
         
-        const summaryText = content.substring(0, 300) + (content.length > 300 ? '...' : '');
-        
-        let actionsHTML = `
-            <a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">
-                Bekijk origineel
-            </a>`;
+        const hasHiddenMeta = metaHiddenHTML.length > 0;
+        const summaryNeedsToggle = content.length > 350;
 
+        let actionsHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">Bekijk origineel</a>`;
         if (type === 'jurisprudence') {
             actionsHTML += `<button class="secondary-button search-related-laws-button" data-summary="${encodeURIComponent(content)}">Zoek gerelateerde wetten</button>`;
         }
+        if (hasHiddenMeta) {
+            actionsHTML += `<button class="details-toggle-button" data-action="toggle-details">Toon details ▼</button>`;
+        }
+
 
         return `
             <div class="result-item" data-index="${index}">
                 <div>
                     <div class="result-item-header"><h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3></div>
-                    <div class="meta-info">${metaHTML}</div>
-                    <div class="summary" id="summary-${index}">${summaryText}</div>
+                    <div class="meta-info">${metaVisibleHTML}</div>
+                    <div class="detailed-meta-info">${metaHiddenHTML}</div>
+                    <div class="summary" id="summary-${index}">${content}</div>
+                    ${summaryNeedsToggle ? '<button class="read-more-button" data-action="toggle-summary">Lees meer...</button>' : ''}
                 </div>
                 <div class="result-item-actions">${actionsHTML}</div>
             </div>`;
@@ -700,9 +724,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- UTILITIES & STATE MANAGEMENT ---
     const handleResultsClick = (e) => {
-        const searchLawsButton = e.target.closest('.search-related-laws-button');
-        if (searchLawsButton) {
-            showKeywordModal(decodeURIComponent(searchLawsButton.dataset.summary));
+        const target = e.target;
+        const action = target.dataset.action;
+
+        if (!action) {
+             const searchLawsButton = e.target.closest('.search-related-laws-button');
+             if (searchLawsButton) {
+                 showKeywordModal(decodeURIComponent(searchLawsButton.dataset.summary));
+             }
+             return;
+        }
+
+        const resultItem = target.closest('.result-item');
+        if (!resultItem) return;
+
+        if (action === 'toggle-summary') {
+            const summaryDiv = resultItem.querySelector('.summary');
+            const isExpanded = summaryDiv.classList.toggle('expanded');
+            target.textContent = isExpanded ? 'Lees minder...' : 'Lees meer...';
+        }
+
+        if (action === 'toggle-details') {
+            const isVisible = resultItem.classList.toggle('details-visible');
+            target.innerHTML = isVisible ? 'Verberg details ▲' : 'Toon details ▼';
         }
     };
     
