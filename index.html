@@ -55,7 +55,7 @@
                                 <div class="advanced-filter-grid">
                                     
                                     <div class="filter-group date-range-group" id="dateFilters">
-                                        <label>Uitspraakdatum periode</label>
+                                        <label>Periode</label>
                                         <div class="date-inputs-container">
                                             <select id="periodPreset" class="filter-input">
                                                 <option value="">-- Selecteer periode --</option>
@@ -66,6 +66,13 @@
                                                 <option value="last-year">Vorig jaar</option>
                                                 <option value="custom">Aangepaste periode...</option>
                                             </select>
+                                            <div id="dateTypeSelector" class="filter-group">
+                                                <label for="dateFilterType">Filter op:</label>
+                                                <select id="dateFilterType" class="filter-input">
+                                                    <option value="uitspraakdatum" selected>Uitspraakdatum</option>
+                                                    <option value="wijzigingsdatum">Wijzigingsdatum</option>
+                                                </select>
+                                            </div>
                                             <div class="date-inputs" id="customDateRange" style="display: none;">
                                                 <input type="date" id="dateFrom" class="filter-input" placeholder="Van datum">
                                                 <span class="date-separator">tot</span>
@@ -103,14 +110,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="filter-group">
-                                        <label>Wijzigingsdatum periode</label>
-                                        <div class="date-inputs">
-                                            <input type="date" id="modifiedFrom" class="filter-input" placeholder="Van datum">
-                                            <span class="date-separator">tot</span>
-                                            <input type="date" id="modifiedTo" class="filter-input" placeholder="Tot datum">
-                                        </div>
-                                    </div>
                                      <div class="filter-group">
                                         <label for="sortOrder">Sortering</label>
                                         <select id="sortOrder" class="filter-input">
@@ -216,4 +215,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
