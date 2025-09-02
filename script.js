@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalJurisprudenceResults = parseInt(subtitle.match(/\d+/)?.[0] || '0', 10);
             
             if (totalJurisprudenceResults > 0) {
-                 const maxToShow = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
+                 const maxToLoad = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
                  elements.totalResultsText.textContent = `${totalJurisprudenceResults} resultaten gevonden`;
                  elements.resultsHeader.style.display = 'block';
                  elements.refineFiltersSection.classList.remove('hidden');
@@ -203,7 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
                  
                  handleRefineSearch();
                  
-                 if(totalJurisprudenceResults > 1000) loadAllJurisprudenceInBackground();
+                 if(maxToLoad > 1000) {
+                    loadAllJurisprudenceInBackground();
+                 }
 
             } else {
                  showStatus(elements.jurisprudenceStatus, 'Geen resultaten gevonden voor deze criteria.', 'warning');
@@ -234,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if(entries.length === 0) break;
                 const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                 jurisprudenceMasterResults.push(...newResults);
-                handleRefineSearch(); // Re-filter and render with new data
+                handleRefineSearch(); 
                 from += newResults.length;
              } catch (error) { break; }
         }
@@ -249,10 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const ecli = entry.querySelector('id')?.textContent || 'Geen ECLI';
         const summary = entry.querySelector('summary')?.textContent || 'Geen samenvatting.';
         const link = entry.querySelector('link')?.getAttribute('href') || '#';
+        const updatedDateRaw = entry.querySelector('updated')?.textContent;
         
         let instantie = 'N/A', uitspraakdatum = 'N/A', zaaknummer = 'N/A', procedure = 'N/A', betrokkenen = 'N/A', dateObject = null, procedureId = null;
 
-        // Fallback parsing from title
         const parts = fullTitle.split(',').map(p => p.trim());
         if (parts.length >= 2) instantie = parts[1];
         if (parts.length >= 3) {
@@ -269,41 +271,15 @@ document.addEventListener('DOMContentLoaded', () => {
             zaaknummer = (zaakSplit.length > 1) ? zaakSplit.slice(1).join('/').trim() : dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
         }
 
-        // Robust parsing from <content> (overrides title parsing if available)
-        try {
-            const contentXmlString = entry.querySelector('content')?.textContent;
-            if (contentXmlString) {
-                const parser = new DOMParser();
-                const contentXml = parser.parseFromString(contentXmlString, "application/xml");
-                const description = contentXml.querySelector('Description');
-                if (description) {
-                    const nsResolver = prefix => ({ 'dcterms': 'http://purl.org/dc/terms/', 'psi': 'http://psi.rechtspraak.nl/' }[prefix] || null);
-                    const getSafeText = (selector) => {
-                        const node = contentXml.evaluate(`.//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-                        return node ? node.textContent.trim() : null;
-                    };
-                    const getSafeAttribute = (selector, attribute) => {
-                        const node = contentXml.evaluate(`.//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-                        return node ? node.getAttribute(attribute) : null;
-                    };
+        if (!dateObject && updatedDateRaw) {
+            const parsedDate = new Date(updatedDateRaw);
+            if (!isNaN(parsedDate)) dateObject = parsedDate;
+        }
 
-                    instantie = getSafeText('dcterms:creator') || instantie;
-                    zaaknummer = getSafeText('psi:zaaknummer') || zaaknummer;
-                    procedure = getSafeText('psi:procedure') || procedure;
-                    procedureId = getSafeAttribute('psi:procedure', 'resourceIdentifier') || null;
-                    betrokkenen = getSafeText('dcterms:contributor') || betrokkenen;
-                    const decisionDateRaw = getSafeText('dcterms:date');
-                    if(decisionDateRaw) {
-                        const parsedDate = new Date(decisionDateRaw);
-                         if (!isNaN(parsedDate)) {
-                            dateObject = parsedDate;
-                            uitspraakdatum = parsedDate.toLocaleDateString('nl-NL');
-                         }
-                    }
-                }
-            }
-        } catch (e) {
-            // Silently fail, fall back to title parsing
+        const procedureFound = proceduresoorten.find(p => summary.toLowerCase().includes(p.name.toLowerCase()));
+        if (procedureFound) {
+            procedure = procedureFound.name;
+            procedureId = procedureFound.id;
         }
 
         return { title: fullTitle, ecli, summary, link, instantie, uitspraakdatum, zaaknummer, procedure, procedureId, betrokkenen, dateObject };
