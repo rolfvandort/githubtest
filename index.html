@@ -130,7 +130,13 @@
                                 <div class="advanced-filter-grid">
                                     <div class="filter-group">
                                         <label for="keywordSearchInput">Trefwoord</label>
-                                        <input type="text" id="keywordSearchInput" placeholder="Filter op trefwoord..." class="filter-input">
+                                        <div class="search-input-container">
+                                            <input type="text" id="keywordSearchInput" placeholder="Filter op trefwoord..." class="filter-input">
+                                            <div id="backgroundLoader" class="background-loader" style="display: none;">
+                                                <div class="spinner-small"></div>
+                                                <span>Meer laden...</span>
+                                            </div>
+                                        </div>
                                         <div class="checkbox-group inline">
                                             <label class="checkbox-option"><input type="checkbox" name="searchIn" value="title" checked><span class="checkmark"></span>Titel</label>
                                             <label class="checkbox-option"><input type="checkbox" name="searchIn" value="summary" checked><span class="checkmark"></span>Samenvatting</label>
