@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- PROXY-INSTELLING ---
     const PROXY_URL = 'https://corsproxy.io/?';
-    const MAX_JURISPRUDENCE_RESULTS = 5000;
+    const MAX_JURISPRUDENCE_RESULTS = 10000;
 
     // --- DATA (direct in de code voor betrouwbaarheid) ---
     const rechtsgebieden = [
@@ -15,11 +15,47 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Artikel 81 RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel81ROzaken' },
         { name: 'Bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#bodemzaak' },
         { name: 'Cassatie', id: 'http://psi.rechtspraak.nl/procedure#cassatie' },
+        { name: 'Cassatie in het belang der wet', id: 'http://psi.rechtspraak.nl/procedure#cassatieInHetBelangDerWet' },
+        { name: 'Conservatoire maatregel', id: 'http://psi.rechtspraak.nl/procedure#conservatoireMaatregel' },
         { name: 'Eerste aanleg - enkelvoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegEnkelvoudig' },
         { name: 'Eerste aanleg - meervoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegMeervoudig' },
+        { name: 'Eerste en enige aanleg', id: 'http://psi.rechtspraak.nl/procedure#eersteEnEnigeAanleg' },
+        { name: 'Herziening', id: 'http://psi.rechtspraak.nl/procedure#herziening' },
         { name: 'Hoger beroep', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroep' },
+        { name: 'Hoger beroep kort geding', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroepKortGeding' },
         { name: 'Kort geding', id: 'http://psi.rechtspraak.nl/procedure#kortGeding' },
-        { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' }
+        { name: 'Mondelinge uitspraak', id: 'http://psi.rechtspraak.nl/procedure#mondelingeUitspraak' },
+        { name: 'Peek', id: 'http://psi.rechtspraak.nl/procedure#peek' },
+        { name: 'Prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleBeslissing' },
+        { name: 'Prejudicieel verzoek', id: 'http://psi.rechtspraak.nl/procedure#prejudicieelVerzoek' },
+        { name: 'Prejudiciële spoedprocedure (PPU)', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleSpoedprocedure(PPU)' },
+        { name: 'Proceskostenveroordeling', id: 'http://psi.rechtspraak.nl/procedure#proceskostenveroordeling' },
+        { name: 'Proces-verbaal', id: 'http://psi.rechtspraak.nl/procedure#procesverbaal' },
+        { name: 'Raadkamer', id: 'http://psi.rechtspraak.nl/procedure#raadkamer' },
+        { name: 'Rekestprocedure', id: 'http://psi.rechtspraak.nl/procedure#rekestprocedure' },
+        { name: 'Schadevergoedingsuitspraak', id: 'http://psi.rechtspraak.nl/procedure#schadevergoedingsuitspraak' },
+        { name: 'Tussenuitspraak bestuurlijke lus', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraakBestuurlijkeLus' },
+        { name: 'Uitspraak na prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#uitspraakNaPrejudicieleBeslissing' },
+        { name: 'Vereenvoudigde behandeling', id: 'http://psi.rechtspraak.nl/procedure#vereenvoudigdeBehandeling' },
+        { name: 'Versnelde behandeling', id: 'http://psi.rechtspraak.nl/procedure#versneldeBehandeling' },
+        { name: 'Verstek', id: 'http://psi.rechtspraak.nl/procedure#verstek' },
+        { name: 'Verwijzing na Hoge Raad', id: 'http://psi.rechtspraak.nl/procedure#verwijzingNaHogeRaad' },
+        { name: 'Verzet', id: 'http://psi.rechtspraak.nl/procedure#verzet' },
+        { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' },
+        { name: 'Voorlopige voorziening+bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorzieningbodemzaak' },
+        { name: 'Wraking', id: 'http://psi.rechtspraak.nl/procedure#wraking' },
+        { name: 'Op tegenspraak', id: 'http://psi.rechtspraak.nl/procedure#opTegenspraak' },
+        { name: 'Belemmeringenwet Privaatrecht', id: 'http://psi.rechtspraak.nl/procedure#belemmeringenwetPrivaatrecht' },
+        { name: 'Artikel 80a RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel80aROzaken' },
+        { name: 'Beschikking', id: 'http://psi.rechtspraak.nl/procedure#beschikking' },
+        { name: 'Tussenbeschikking', id: 'http://psi.rechtspraak.nl/procedure#tussenbeschikking' },
+        { name: 'Herroeping', id: 'http://psi.rechtspraak.nl/procedure#herroeping' },
+        { name: 'Verschoning', id: 'http://psi.rechtspraak.nl/procedure#verschoning' },
+        { name: 'Tussenuitspraak', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraak' },
+        { name: 'Geheimhoudingsbeslissing', id: 'http://psi.rechtspraak.nl/procedure#geheimhoudingsbeslissing' },
+        { name: 'NCC', id: 'http://psi.rechtspraak.nl/procedure#NCC' },
+        { name: 'NCCA', id: 'http://psi.rechtspraak.nl/procedure#NCCA' },
+        { name: 'Beslissing RC', id: 'http://psi.rechtspraak.nl/procedure#beslissingRC' }
     ];
 
     const instanties = [
@@ -51,8 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
         apiFilters: document.getElementById('apiFilters'),
         showFiltersButton: document.getElementById('showFiltersButton'),
         resetFiltersButton: document.getElementById('resetFiltersButton'),
-        quickSearchInput: document.getElementById('quickSearchInput'),
-        quickSearchButton: document.getElementById('quickSearchButton'),
         periodPreset: document.getElementById('periodPreset'),
         customDateRange: document.getElementById('customDateRange'),
         dateFilterType: document.getElementById('dateFilterType'),
@@ -65,13 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearCreator: document.getElementById('clearCreator'),
         creatorSuggestions: document.getElementById('creatorSuggestions'),
         apiSearchButton: document.getElementById('apiSearchButton'),
-        smartFilterButton: document.getElementById('smartFilterButton'),
+        keywordFilterButton: document.getElementById('keywordFilterButton'),
         loadingIndicator: document.getElementById('loadingIndicator'),
         resultsHeader: document.getElementById('resultsHeader'),
         totalResultsText: document.getElementById('totalResultsText'),
         activeFilters: document.getElementById('activeFilters'),
-        smartSearchSection: document.getElementById('smartSearchSection'),
-        smartSearchInput: document.getElementById('smartSearchInput'),
+        keywordSearchSection: document.getElementById('keywordSearchSection'),
+        keywordSearchInput: document.getElementById('keywordSearchInput'),
         backgroundLoader: document.getElementById('backgroundLoader'),
         searchInCheckboxes: document.querySelectorAll('input[name="searchIn"]'),
         jurisprudenceStatus: document.getElementById('jurisprudenceStatus'),
@@ -95,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let jurisprudenceMasterResults = [];
     let jurisprudenceCurrentResults = [];
     let totalJurisprudenceResults = 0;
-    let currentJurisprudenceParams = null;
     let jurisprudenceCurrentPage = 1;
     const jurisprudenceResultsPerPage = 10;
     let isJurisprudenceLoadingInBackground = false;
@@ -107,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const wettenbankResultsPerPage = 10;
 
     let debounceTimer = null;
-    let isFiltersVisible = false;
+    let isFiltersVisible = true;
     let isWettenbankFiltersVisible = false;
 
     // --- INITIALISATIE ---
@@ -119,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const populateSelect = (selectElement, items, defaultOptionText) => {
         selectElement.innerHTML = `<option value="">-- ${defaultOptionText} --</option>`;
-        items.forEach(item => {
+        items.sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
             const opt = document.createElement('option');
             opt.value = item.id;
             opt.textContent = item.name;
@@ -131,14 +164,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupEventListeners = () => {
         elements.showFiltersButton.addEventListener('click', toggleFilters);
         elements.resetFiltersButton.addEventListener('click', resetAllFilters);
-        elements.quickSearchButton.addEventListener('click', () => handleJurisprudenceSearch(true));
-        elements.quickSearchInput.addEventListener('keypress', e => { if (e.key === 'Enter') handleJurisprudenceSearch(true); });
         elements.periodPreset.addEventListener('change', handlePeriodPresetChange);
         elements.creator.addEventListener('input', () => handleAutocompleteDebounced(elements.creator, elements.creatorSuggestions, instanties));
         elements.clearCreator.addEventListener('click', clearCreatorInput);
         elements.apiSearchButton.addEventListener('click', () => handleJurisprudenceSearch(true));
-        elements.smartSearchInput.addEventListener('input', handleSmartSearch);
-        elements.smartFilterButton.addEventListener('click', handleSmartSearch);
+        elements.keywordSearchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(filterResultsByKeyword, 300);
+        });
+        elements.keywordFilterButton.addEventListener('click', filterResultsByKeyword);
         elements.sortOrder.addEventListener('change', handleSortChange);
         
         elements.jurisprudenceResults.addEventListener('click', handleResultsClick);
@@ -169,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleFilters = () => {
         isFiltersVisible = !isFiltersVisible;
         elements.apiFilters.style.display = isFiltersVisible ? 'block' : 'none';
-        elements.showFiltersButton.innerHTML = `<span id="filterToggleIcon">${isFiltersVisible ? '▲' : '▼'}</span> ${isFiltersVisible ? 'Verberg filters' : 'Geavanceerd zoeken'}`;
+        elements.showFiltersButton.innerHTML = `<span id="filterToggleIcon">${isFiltersVisible ? '▲' : '▼'}</span> ${isFiltersVisible ? 'Verberg filters' : 'Zoeken met filters'}`;
         elements.resetFiltersButton.style.display = isFiltersVisible ? 'inline-flex' : 'none';
     };
 
@@ -190,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('input[name="documentType"][value=""]').checked = true;
         elements.sortOrder.value = 'DESC';
         elements.dateFilterType.value = 'uitspraakdatum';
-        elements.quickSearchInput.value = '';
+        elements.keywordSearchInput.value = '';
         elements.creator.removeAttribute('data-id');
         elements.customDateRange.style.display = 'none';
         elements.clearCreator.style.display = 'none';
@@ -199,17 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
         jurisprudenceCurrentResults = [];
         totalJurisprudenceResults = 0;
         jurisprudenceCurrentPage = 1;
-        currentJurisprudenceParams = null;
         isJurisprudenceLoadingInBackground = false;
-
 
         elements.jurisprudenceResults.innerHTML = '';
         elements.jurisprudencePagination.innerHTML = '';
         elements.jurisprudenceStatus.style.display = 'none';
         elements.resultsHeader.style.display = 'none';
         elements.activeFilters.innerHTML = '';
-        elements.smartSearchSection.classList.add('hidden');
-        showNotification('Alle filters zijn gewist', 'success');
+        elements.keywordSearchSection.classList.add('hidden');
+        showNotification('Alle filters zijn gewist.', 'success');
     };
 
     const handlePeriodPresetChange = () => {
@@ -260,56 +292,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCreatorInput = () => { elements.creator.value = ''; elements.creator.removeAttribute('data-id'); elements.creatorSuggestions.innerHTML = ''; elements.clearCreator.style.display = 'none'; };
 
     // --- ZOEKFUNCTIES (JURISPRUDENTIE) ---
-    const buildJurisprudenceParams = (from = 0) => {
-        if (!currentJurisprudenceParams) {
-            const params = new URLSearchParams();
-            const dateType = elements.dateFilterType.value;
-
-            if (dateType === 'uitspraakdatum') {
-                if (elements.dateFrom.value) params.append('date', elements.dateFrom.value);
-                if (elements.dateTo.value) params.append('date', elements.dateTo.value);
-            } else if (dateType === 'wijzigingsdatum') {
-                if (elements.dateFrom.value) params.append('modified', `${elements.dateFrom.value}T00:00:00`);
-                if (elements.dateTo.value) params.append('modified', `${elements.dateTo.value}T23:59:59`);
-            }
-
-            if (elements.subject.value) params.append('subject', elements.subject.value);
-            if (elements.procedure.value) params.append('procedure', elements.procedure.value);
-            if (elements.creator.dataset.id) params.append('creator', elements.creator.dataset.id);
-            const selectedType = document.querySelector('input[name="documentType"]:checked')?.value;
-            if (selectedType) params.append('type', selectedType);
-            params.append('return', 'DOC');
-            
+    const buildJurisprudenceParams = (from = 0, includeSort = false) => {
+        const params = new URLSearchParams();
+        const dateType = elements.dateFilterType.value;
+    
+        if (dateType === 'uitspraakdatum') {
+            if (elements.dateFrom.value) params.append('date', elements.dateFrom.value);
+            if (elements.dateTo.value) params.append('date', elements.dateTo.value);
+        } else if (dateType === 'wijzigingsdatum') {
+            if (elements.dateFrom.value) params.append('modified', `${elements.dateFrom.value}T00:00:00`);
+            if (elements.dateTo.value) params.append('modified', `${elements.dateTo.value}T23:59:59`);
+        }
+    
+        if (elements.subject.value) params.append('subject', elements.subject.value);
+        if (elements.procedure.value) params.append('procedure', elements.procedure.value);
+        if (elements.creator.dataset.id) params.append('creator', elements.creator.dataset.id);
+        const selectedType = document.querySelector('input[name="documentType"]:checked')?.value;
+        if (selectedType) params.append('type', selectedType);
+        params.append('return', 'DOC');
+    
+        if (includeSort) {
             const sortValue = elements.sortOrder.value;
             if (sortValue === 'ASC' || sortValue === 'DESC') {
                 params.append('sort', sortValue);
             }
-            
-            params.append('max', '1000');
-            currentJurisprudenceParams = params;
         }
-        
-        currentJurisprudenceParams.set('from', from);
-        return currentJurisprudenceParams;
+    
+        params.append('max', '1000');
+        params.set('from', from);
+    
+        return params;
     };
 
-    const handleJurisprudenceSearch = async () => {
-        // Reset state for a new search
-        jurisprudenceMasterResults = [];
-        totalJurisprudenceResults = 0;
-        jurisprudenceCurrentPage = 1;
-        currentJurisprudenceParams = null; // Force rebuild of params
-        isJurisprudenceLoadingInBackground = false;
-        
+    const handleJurisprudenceSearch = async (isNewSearch = false) => {
+        if (isNewSearch) {
+            jurisprudenceMasterResults = [];
+            totalJurisprudenceResults = 0;
+            jurisprudenceCurrentPage = 1;
+            isJurisprudenceLoadingInBackground = false;
+        }
+
         elements.jurisprudenceResults.innerHTML = '';
         elements.jurisprudencePagination.innerHTML = '';
-        elements.smartSearchSection.classList.add('hidden');
+        elements.keywordSearchSection.classList.add('hidden');
         elements.resultsHeader.style.display = 'none';
 
         showLoading(true, true);
         displayActiveFilters();
         
-        const params = buildJurisprudenceParams(1); // Start from 1
+        const includeSort = (elements.sortOrder.value === 'ASC' || elements.sortOrder.value === 'DESC');
+        const params = buildJurisprudenceParams(1, includeSort); 
         const requestUrl = `${PROXY_URL}${encodeURIComponent(`https://data.rechtspraak.nl/uitspraken/zoeken?${params.toString()}`)}`;
 
         try {
@@ -327,13 +359,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (totalJurisprudenceResults > 0) {
                  elements.totalResultsText.textContent = `${totalJurisprudenceResults} resultaten gevonden`;
                  elements.resultsHeader.style.display = 'block';
-                 elements.smartSearchSection.classList.remove('hidden');
+                 elements.keywordSearchSection.classList.remove('hidden');
+                 
+                 if (totalJurisprudenceResults > MAX_JURISPRUDENCE_RESULTS) {
+                    showStatus(elements.jurisprudenceStatus, `Let op: er zijn meer dan ${MAX_JURISPRUDENCE_RESULTS} resultaten. Alleen de eerste ${MAX_JURISPRUDENCE_RESULTS} worden geladen. Verfijn uw zoekopdracht voor een completer resultaat.`, 'warning');
+                 } else {
+                    elements.jurisprudenceStatus.style.display = 'none';
+                 }
 
                  const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
-                 const newResults = entries.map(parseJurisprudenceEntry);
+                 const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                  jurisprudenceMasterResults.push(...newResults);
                  
-                 handleSortChange(); // Sorteert en rendert de eerste pagina
+                 sortAndRenderJurisprudence(); 
                  
                  if(totalJurisprudenceResults > 1000) {
                     loadAllJurisprudenceInBackground();
@@ -362,124 +400,135 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxToFetch = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
 
         while(from <= maxToFetch) {
-             const params = buildJurisprudenceParams(from);
+             const includeSort = (elements.sortOrder.value === 'ASC' || elements.sortOrder.value === 'DESC');
+             const params = buildJurisprudenceParams(from, includeSort);
              const requestUrl = `${PROXY_URL}${encodeURIComponent(`https://data.rechtspraak.nl/uitspraken/zoeken?${params.toString()}`)}`;
 
              try {
                 const response = await fetch(requestUrl);
-                if (!response.ok) break; // Stop on error
+                if (!response.ok) break;
                 const xmlString = await response.text();
                 const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
                 const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
 
-                if(entries.length === 0) break; // No more results
+                if(entries.length === 0) break;
 
-                const newResults = entries.map(parseJurisprudenceEntry);
+                const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                 jurisprudenceMasterResults.push(...newResults);
                 
-                // Update results if user is filtering
-                handleSmartSearch();
+                sortAndRenderJurisprudence();
 
                 from += entries.length;
 
              } catch (error) {
                 console.error("Fout bij laden op achtergrond:", error);
-                break; // Stop on error
+                break;
              }
         }
 
         isJurisprudenceLoadingInBackground = false;
         elements.backgroundLoader.style.display = 'none';
         showNotification(`Alle ${jurisprudenceMasterResults.length} resultaten zijn geladen.`, 'success');
+        
+        sortAndRenderJurisprudence();
     };
 
     const parseJurisprudenceEntry = (entry) => {
         const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel beschikbaar';
         const ecli = entry.querySelector('id')?.textContent || 'Geen ECLI';
-        const updatedDate = entry.querySelector('updated')?.textContent;
-    
+        const lastUpdatedDateRaw = entry.querySelector('updated')?.textContent;
+        const lastUpdatedDate = lastUpdatedDateRaw ? new Date(lastUpdatedDateRaw) : null;
+        const issuedDateRaw = entry.querySelector('issued')?.textContent;
+        const issuedDate = issuedDateRaw ? new Date(issuedDateRaw) : null;
+        const decisionDateRaw = entry.querySelector('date')?.textContent;
+        let decisionDateObject = decisionDateRaw ? new Date(decisionDateRaw) : null;
+        let uitspraakdatum = decisionDateObject ? decisionDateObject.toLocaleDateString('nl-NL') : 'Niet beschikbaar';
+
         let instantie = 'N/A';
-        let uitspraakdatum = 'N/A';
         let zaaknummer = 'N/A';
-        let dateObject = null;
-    
         const parts = fullTitle.split(',').map(p => p.trim());
-    
+        if (parts.length >= 2) { instantie = parts[1]; }
         if (parts.length >= 3) {
-            instantie = parts[1];
             const dateZaakPart = parts[2];
-            const dateMatch = dateZaakPart.match(/(\d{4}-\d{2}-\d{2})/);
-            if (dateMatch) {
-                dateObject = new Date(dateMatch[1]);
-                uitspraakdatum = dateObject.toLocaleDateString('nl-NL');
-                
-                const zaakSplit = dateZaakPart.split('/');
-                if (zaakSplit.length > 1) {
-                    zaaknummer = zaakSplit.slice(1).join('/').trim();
-                } else {
-                    zaaknummer = dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
+            if (!decisionDateObject) {
+                const dateMatch = dateZaakPart.match(/(\d{4}-\d{2}-\d{2})/);
+                if (dateMatch) {
+                    const parsedDate = new Date(dateMatch[1]);
+                    if (!isNaN(parsedDate)) {
+                        decisionDateObject = parsedDate;
+                        uitspraakdatum = parsedDate.toLocaleDateString('nl-NL');
+                    }
                 }
             }
-        } else if (parts.length === 2) {
-             instantie = parts[1];
+            const zaakSplit = dateZaakPart.split('/');
+            zaaknummer = zaakSplit.length > 1 ? zaakSplit.slice(1).join('/').trim() : dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
+            if (!zaaknummer) zaaknummer = 'Niet beschikbaar';
         }
-    
+
+        if (!decisionDateObject) { decisionDateObject = issuedDate || lastUpdatedDate; }
+
         return {
             title: fullTitle, ecli, instantie, uitspraakdatum, zaaknummer,
             summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting beschikbaar.',
             link: entry.querySelector('link')?.getAttribute('href') || '#',
-            dateObject: dateObject,
-            publicatiedatum: new Date(updatedDate)
+            dateObject: decisionDateObject,
+            publicatiedatum: issuedDate ? issuedDate.toLocaleDateString('nl-NL') : 'Niet beschikbaar',
+            gewijzigd: lastUpdatedDate ? lastUpdatedDate.toLocaleDateString('nl-NL') : 'Niet beschikbaar'
         };
     };
+    
+    const sortAndRenderJurisprudence = () => {
+        filterResultsByKeyword(false); // Filter first without re-rendering
 
-    const handleSmartSearch = () => {
-        jurisprudenceCurrentPage = 1; // Reset to first page after filtering
-        const keyword = elements.smartSearchInput.value.toLowerCase().trim() || elements.quickSearchInput.value.toLowerCase().trim();
+        const sortValue = elements.sortOrder.value;
+        if (sortValue === 'date-desc' || sortValue === 'date-asc') {
+             if (jurisprudenceMasterResults.length < totalJurisprudenceResults && !isJurisprudenceLoadingInBackground) {
+                showNotification('Let op: sortering op uitspraakdatum wordt enkel toegepast op de reeds geladen resultaten.', 'warning');
+            }
+            jurisprudenceCurrentResults.sort((a, b) => {
+                const dateA = a.dateObject;
+                const dateB = b.dateObject;
+                if (!dateA || !dateB || isNaN(dateA) || isNaN(dateB)) return 0;
+                return sortValue === 'date-desc' ? dateB - dateA : dateA - dateB;
+            });
+        }
+        
+        renderJurisprudenceResults(); // Now render the sorted and filtered results
+    }
+
+    const filterResultsByKeyword = (shouldRender = true) => {
+        jurisprudenceCurrentPage = 1;
+        const keyword = elements.keywordSearchInput.value.toLowerCase().trim();
         const searchIn = Array.from(elements.searchInCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 
-        if (elements.smartSearchInput.value.trim() && searchIn.length === 0) {
-            jurisprudenceCurrentResults = jurisprudenceMasterResults; // Show all if no fields selected
+        if (keyword && searchIn.length === 0) {
+            jurisprudenceCurrentResults = jurisprudenceMasterResults;
         } else {
              jurisprudenceCurrentResults = jurisprudenceMasterResults.filter(item => {
                 if (!keyword) return true;
-                const useQuickSearchLogic = !elements.smartSearchInput.value.trim();
-                
-                if (useQuickSearchLogic) {
-                    return item.title.toLowerCase().includes(keyword) || 
-                           item.summary.toLowerCase().includes(keyword) || 
-                           item.ecli.toLowerCase().includes(keyword);
-                } else {
-                     const inTitle = searchIn.includes('title') && item.title.toLowerCase().includes(keyword);
-                     const inSummary = searchIn.includes('summary') && item.summary.toLowerCase().includes(keyword);
-                     const inEcli = searchIn.includes('ecli') && item.ecli.toLowerCase().includes(keyword);
-                     return inTitle || inSummary || inEcli;
-                }
+                const inTitle = searchIn.includes('title') && item.title.toLowerCase().includes(keyword);
+                const inSummary = searchIn.includes('summary') && item.summary.toLowerCase().includes(keyword);
+                const inEcli = searchIn.includes('ecli') && item.ecli.toLowerCase().includes(keyword);
+                return inTitle || inSummary || inEcli;
             });
         }
-        renderJurisprudenceResults();
+        
+        if (shouldRender) {
+            renderJurisprudenceResults();
+        }
     };
     
     const handleSortChange = () => {
         const sortValue = elements.sortOrder.value;
         if (sortValue === 'ASC' || sortValue === 'DESC') {
-            if (jurisprudenceMasterResults.length > 0) {
-                handleJurisprudenceSearch();
-            }
+            handleJurisprudenceSearch(true);
             return;
         }
-
-        jurisprudenceMasterResults.sort((a, b) => {
-            const dateA = a.dateObject;
-            const dateB = b.dateObject;
-            if (!dateA || !dateB) return 0;
-            
-            if (sortValue === 'date-desc') return dateB - dateA;
-            if (sortValue === 'date-asc') return dateA - dateB;
-            return 0;
-        });
-        
-        handleSmartSearch();
+        if (jurisprudenceMasterResults.length > 0) {
+            sortAndRenderJurisprudence();
+        } else {
+             showNotification("Voer eerst een zoekopdracht uit voordat u sorteert.", "info");
+        }
     };
     
     // --- WETTENBANK SEARCH (SRU 2.0) ---
@@ -585,7 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderJurisprudenceResults = () => {
         elements.jurisprudenceResults.innerHTML = '';
-        const keyword = elements.smartSearchInput.value.trim().toLowerCase() || elements.quickSearchInput.value.trim().toLowerCase();
+        const keyword = elements.keywordSearchInput.value.trim().toLowerCase();
         
         const startIndex = (jurisprudenceCurrentPage - 1) * jurisprudenceResultsPerPage;
         const endIndex = startIndex + jurisprudenceResultsPerPage;
@@ -603,6 +652,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     "Instantie": item.instantie,
                     "Uitspraakdatum": item.uitspraakdatum,
                     "Zaaknummer(s)": item.zaaknummer,
+                    "Publicatiedatum": item.publicatiedatum,
+                    "Laatste update": item.gewijzigd
                 },
                 `jurisprudence-${globalIndex}`
             );
@@ -650,9 +701,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const createResultItemHTML = (type, title, link, content, meta, index) => {
         const metaHTML = Object.entries(meta)
-            .filter(([, value]) => value && value.trim() !== 'N/A' && value.trim() !== '')
-            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
-        
+            .filter(([, value]) => value && value.trim() !== 'N/A' && value.trim() !== '' && value.trim() !== 'Niet beschikbaar')
+            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');       
+ 
         const summaryNeedsToggle = content.length > 350;
 
         let actionsHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">Bekijk origineel</a>`;
@@ -700,9 +751,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showKeywordModal = (summary) => {
-        const stopWords = new Set(['de', 'het', 'een', 'en', 'van', 'in', 'op', 'met', 'is', 'zijn', 'aan', 'voor', 'door', 'als', 'dat', 'heeft', 'wordt', 'te', 'om', 'uit', 'bij', 'dan', 'naar', 'tot', 'ook', 'niet', 'over', 'onder', 'welke', 'deze', 'dit', 'die', 'er', 'maar', 'zal', 'kan', 'worden', 'heeft']);
+        const stopWords = new Set(['de', 'het', 'een', 'en', 'van', 'in', 'op', 'met', 'is', 'zijn', 'aan', 'voor', 'door', 'als', 'dat', 'heeft', 'wordt', 'te', 'om', 'uit', 'bij', 'dan', 'naar', 'tot', 'ook', 'niet', 'over', 'onder', 'welke', 'deze', 'dit', 'die', 'er', 'maar', 'zal', 'kan', 'worden', 'heeft', 'artikel', 'bepaalt', 'bepaalde', 'beslissing', 'eiser', 'gedaagde', 'gevolg', 'grond', 'inzake', 'overwegende', 'rechtbank', 'ten', 'uitspraak', 'verweerder', 'volgt', 'zaak']);
         const keywords = summary.toLowerCase()
-                                .replace(/<[^>]*>/g, "") // Verwijder HTML-tags (zoals <mark>)
+                                .replace(/<[^>]*>/g, "")
                                 .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
                                 .split(/\s+/)
                                 .filter(word => word.length > 3 && !stopWords.has(word));
@@ -721,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             elements.keywordModal.style.display = 'flex';
         } else {
-            showNotification('Geen unieke trefwoorden gevonden in de samenvatting.', 'warning');
+            showNotification('Geen relevante trefwoorden gevonden in de samenvatting.', 'warning');
         }
     };
 
@@ -857,9 +908,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return `<div class="active-filter-tag">${value}</div>`;
         };
 
-        const keyword = elements.quickSearchInput.value.trim();
-        if (keyword) html += addTag(`Trefwoord: "${keyword}"`);
-
         const creatorName = elements.creator.value.trim();
         if (creatorName) html += addTag(`Instantie: ${creatorName}`);
 
@@ -878,7 +926,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- KEYBOARD SHORTCUTS ---
     document.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); elements.quickSearchInput.focus(); }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') { 
+            e.preventDefault(); 
+            if (elements.keywordSearchSection.classList.contains('hidden')) {
+                elements.apiSearchButton.focus();
+            } else {
+                elements.keywordSearchInput.focus(); 
+            }
+        }
         if (e.key === 'Escape') { 
             if (elements.keywordModal.style.display === 'flex') hideKeywordModal();
             else { elements.creatorSuggestions.innerHTML = ''; document.activeElement.blur(); }
@@ -894,7 +949,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .primary-button .spinner-small { border-color: #fff; border-top-color: transparent;}
         .background-loader .spinner-small { border-color: var(--medium-gray); border-top-color: var(--primary-blue); }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 6px; color: white; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideInRight 0.3s ease forwards; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 12px 20px; border-radius: 6px; color: white; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideInRight 0.3s ease forwards; font-family: var(--font-family); }
         .notification.success { background-color: #28a745; }
         .notification.error { background-color: #dc3545; }
         .notification.warning { background-color: #ffc107; color: #343a40; }
