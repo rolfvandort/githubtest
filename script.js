@@ -31,18 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INITIALISATIE ---
     const initializeApp = () => {
-        populateSelect(elements.subject, rechtsgebieden, 'Alle rechtsgebieden');
-        populateSelect(elements.procedureRefine, proceduresoorten, 'Alle procedures');
+        populateSelect(elements.subject, rechtsgebieden, 'Alle rechtsgebieden', true);
+        populateSelect(elements.procedureRefine, proceduresoorten, 'Alle procedures', false);
         setupEventListeners();
         elements.apiFilters.classList.remove('collapsed'); 
     };
 
-    const populateSelect = (selectElement, items, defaultOptionText) => {
+    const populateSelect = (selectElement, items, defaultOptionText, useId = false) => {
         if (!selectElement) return;
         selectElement.innerHTML = `<option value="">-- ${defaultOptionText} --</option>`;
         items.sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
             const opt = document.createElement('option');
-            opt.value = item.name;
+            opt.value = useId ? item.id : item.name;
             opt.textContent = item.name;
             selectElement.appendChild(opt);
         });
@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('apiFiltersContainer').querySelectorAll('input, select').forEach(el => el.value = '');
         document.getElementById('refineFiltersSection').querySelectorAll('input, select').forEach(el => el.value = '');
         document.querySelector('input[name="documentType"][value=""]').checked = true;
+        Array.from(elements.searchInCheckboxes).forEach(cb => cb.checked = true);
         elements.sortOrder.value = 'date-desc';
         elements.dateFilterType.value = 'uitspraakdatum';
         elements.creator.removeAttribute('data-id');
@@ -148,12 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const fromDate = elements.dateFrom.value;
         const toDate = elements.dateTo.value;
     
-        if (dateType === 'uitspraakdatum' && fromDate && toDate) {
-            params.append('date', fromDate);
-            params.append('date', toDate);
-        } else if (dateType === 'wijzigingsdatum' && fromDate && toDate) {
-            params.append('modified', `${fromDate}T00:00:00`);
-            params.append('modified', `${toDate}T23:59:59`);
+        if (dateType === 'uitspraakdatum') {
+            if (fromDate) params.append('date', fromDate);
+            if (toDate) params.append('date', toDate);
+        } else if (dateType === 'wijzigingsdatum') {
+            if (fromDate) params.append('modified', `${fromDate}T00:00:00`);
+            if (toDate) params.append('modified', `${toDate}T23:59:59`);
         }
     
         if (elements.subject.value) params.append('subject', elements.subject.value);
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status}`);
+            if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status} ${response.statusText}`);
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
             
@@ -191,15 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
                  elements.refineFiltersSection.classList.remove('hidden');
                  if (!elements.apiFilters.classList.contains('collapsed')) toggleApiFilters();
                  
+                 elements.jurisprudenceStatus.style.display = 'none';
                  if (totalJurisprudenceResults > MAX_JURISPRUDENCE_RESULTS) {
                     showStatus(elements.jurisprudenceStatus, `Let op: er zijn meer dan ${MAX_JURISPRUDENCE_RESULTS} resultaten. Alleen de eerste ${MAX_JURISPRUDENCE_RESULTS} worden geladen.`, 'warning');
-                 } else {
-                    elements.jurisprudenceStatus.style.display = 'none';
                  }
 
                  const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
-                 const newResults = await Promise.all(entries.map(entry => parseJurisprudenceEntry(entry)));
-                 jurisprudenceMasterResults.push(...newResults);
+                 jurisprudenceMasterResults = entries.map(entry => parseJurisprudenceEntry(entry));
                  
                  handleRefineSearch();
                  
@@ -232,10 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
                 const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
                 if(entries.length === 0) break;
-                const newResults = await Promise.all(entries.map(entry => parseJurisprudenceEntry(entry)));
+                const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                 jurisprudenceMasterResults.push(...newResults);
-                handleRefineSearch();
-                from += entries.length;
+                handleRefineSearch(); // Re-filter and render with new data
+                from += newResults.length;
              } catch (error) { break; }
         }
         isJurisprudenceLoadingInBackground = false;
@@ -244,47 +243,37 @@ document.addEventListener('DOMContentLoaded', () => {
         handleRefineSearch();
     };
 
-    const parseJurisprudenceEntry = async (entry) => {
-        const ecli = entry.querySelector('id')?.textContent || 'Geen ECLI';
-        const link = `https://data.rechtspraak.nl/uitspraken/content?id=${ecli}`;
-        const requestUrl = `${PROXY_URL}${encodeURIComponent(link)}`;
+    const parseJurisprudenceEntry = (entry) => {
+        const contentXmlString = entry.querySelector('content')?.textContent || '<rdf:RDF></rdf:RDF>';
+        const parser = new DOMParser();
+        const contentXml = parser.parseFromString(contentXmlString, "application/xml");
+        const description = contentXml.querySelector('Description');
 
-        let details = { procedure: 'N/A', zaaknummer: 'N/A', betrokkenen: 'N/A', dateObject: null, uitspraakdatum: 'N/A' };
+        const nsResolver = (prefix) => {
+            const ns = { 'dcterms': 'http://purl.org/dc/terms/', 'psi': 'http://psi.rechtspraak.nl/' };
+            return ns[prefix] || null;
+        };
 
-        try {
-            const response = await fetch(requestUrl);
-            if (response.ok) {
-                const xmlString = await response.text();
-                const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
-                const description = xmlDoc.querySelector('rdf\\:Description, Description');
-                
-                if (description) {
-                    const procedureNode = description.querySelector('procedure, psi\\:procedure');
-                    details.procedure = procedureNode ? procedureNode.textContent.trim() : 'N/A';
-                    
-                    const zaaknummerNode = description.querySelector('zaaknummer, psi\\:zaaknummer');
-                    details.zaaknummer = zaaknummerNode ? zaaknummerNode.textContent.trim() : 'N/A';
+        const getSafeText = (selector) => {
+            if (!description) return '';
+            const node = contentXml.evaluate(`.//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            return node ? node.textContent.trim() : '';
+        };
 
-                    const contributorNode = description.querySelector('contributor, dcterms\\:contributor');
-                    details.betrokkenen = contributorNode ? contributorNode.textContent.trim() : 'N/A';
-                    
-                    const dateNode = description.querySelector('date, dcterms\\:date');
-                    if (dateNode && dateNode.textContent) {
-                        details.dateObject = new Date(dateNode.textContent);
-                        details.uitspraakdatum = details.dateObject.toLocaleDateString('nl-NL');
-                    }
-                }
-            }
-        } catch (e) {
-            // Fout bij ophalen details, blijf bij defaults
-        }
+        const decisionDateRaw = getSafeText('dcterms:date');
+        const decisionDateObject = decisionDateRaw ? new Date(decisionDateRaw) : null;
 
         return {
             title: entry.querySelector('title')?.textContent || 'Geen titel',
-            ecli: ecli,
+            ecli: entry.querySelector('id')?.textContent || 'Geen ECLI',
             summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting.',
             link: entry.querySelector('link')?.getAttribute('href') || '#',
-            ...details
+            instantie: getSafeText('dcterms:creator') || 'N/A',
+            uitspraakdatum: decisionDateObject ? decisionDateObject.toLocaleDateString('nl-NL') : 'N/A',
+            zaaknummer: getSafeText('psi:zaaknummer') || 'N/A',
+            procedure: getSafeText('psi:procedure') || 'N/A',
+            betrokkenen: getSafeText('dcterms:contributor') || 'N/A',
+            dateObject: decisionDateObject
         };
     };
 
@@ -394,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const createResultItemHTML = (type, title, link, content, meta, index) => {
         const metaHTML = Object.entries(meta).filter(([, value]) => value && value.trim() && value.trim() !== 'N/A').map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
         const actionsHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">Bekijk origineel</a>` + (type === 'jurisprudence' ? `<button class="secondary-button search-related-laws-button" data-summary="${encodeURIComponent(content)}">Zoek gerelateerde wetten</button>` : '');
-        return `<div class="result-item" data-index="${index}"><div><div class="result-item-header"><h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3></div><div class="meta-info">${metaHTML}</div><div class="summary">${content}</div>${content.length > 350 ? '<button class="read-more-button" data-action="toggle-summary">Lees meer...</button>' : ''}</div><div class="result-item-actions">${actionsHTML}</div></div>`;
+        return `<div class="result-item" data-index="${index}"><div><div class="result-item-header"><h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3></div><div class="meta-info">${metaHTML}</div><div class="summary">${content}</div>${content && content.length > 350 ? '<button class="read-more-button" data-action="toggle-summary">Lees meer...</button>' : ''}</div><div class="result-item-actions">${actionsHTML}</div></div>`;
     };
 
     const renderWettenbankFacets = (xmlDoc) => {
