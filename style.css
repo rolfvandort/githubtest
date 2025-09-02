@@ -155,11 +155,7 @@ body {
     flex-direction: column;
 }
 
-/* Quick Search */
-.quick-search-section {
-    margin-bottom: 24px;
-}
-
+/* Quick Search (verwijderd, stijlen kunnen eventueel hergebruikt worden) */
 .search-input-container {
     display: flex;
     gap: 8px;
@@ -526,6 +522,58 @@ body {
     height: 16px;
     border: 2px solid var(--light-gray);
     border-top-color: var(--primary-blue);
+}
+/* Tooltip styles */
+.section-header-tooltip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.section-header-tooltip h3 {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.tooltip-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--medium-gray);
+    color: var(--text-muted);
+    font-weight: bold;
+    cursor: help;
+    font-size: 12px;
+}
+
+.tooltip-icon .tooltip-text {
+    visibility: hidden;
+    width: 250px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -125px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.tooltip-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 
 
