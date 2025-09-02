@@ -5,10 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DATA (direct in de code voor betrouwbaarheid) ---
     const rechtsgebieden = [
-        { name: 'Bestuursrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#bestuursrecht' },
-        { name: 'Civiel recht', id: 'http://psi.rechtspraak.nl/rechtsgebied#civielRecht' },
-        { name: 'Internationaal publiekrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#internationaalPubliekrecht' },
-        { name: 'Strafrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#strafrecht' }
+        { name: 'Bestuursrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#bestuursrecht' }, { name: 'Civiel recht', id: 'http://psi.rechtspraak.nl/rechtsgebied#civielRecht' }, { name: 'Internationaal publiekrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#internationaalPubliekrecht' }, { name: 'Strafrecht', id: 'http://psi.rechtspraak.nl/rechtsgebied#strafrecht' }
     ];
 
     const proceduresoorten = [
@@ -37,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         populateSelect(elements.subject, rechtsgebieden, 'Alle rechtsgebieden', true);
         populateSelect(elements.procedureRefine, proceduresoorten, 'Alle procedures', true);
         setupEventListeners();
-        elements.apiFilters.classList.remove('collapsed'); 
+        elements.apiFilters.classList.remove('collapsed');
     };
 
     const populateSelect = (selectElement, items, defaultOptionText, useIdAsValue = false) => {
@@ -50,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectElement.appendChild(opt);
         });
     };
-    
+
     // --- EVENT LISTENERS ---
     const setupEventListeners = () => {
         elements.showFiltersButton.addEventListener('click', toggleApiFilters);
@@ -146,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCreatorInput = () => { elements.creator.value = ''; elements.creator.removeAttribute('data-id'); elements.creatorSuggestions.innerHTML = ''; elements.clearCreator.style.display = 'none'; };
 
     // --- ZOEKFUNCTIES (JURISPRUDENTIE) ---
-    const buildJurisprudenceParams = (from = 0) => {
+    const buildJurisprudenceParams = (from = 1) => {
         const params = new URLSearchParams();
         const dateType = elements.dateFilterType.value;
         const fromDate = elements.dateFrom.value;
@@ -190,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalJurisprudenceResults = parseInt(subtitle.match(/\d+/)?.[0] || '0', 10);
             
             if (totalJurisprudenceResults > 0) {
+                 const maxToShow = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
                  elements.totalResultsText.textContent = `${totalJurisprudenceResults} resultaten gevonden`;
                  elements.resultsHeader.style.display = 'block';
                  elements.refineFiltersSection.classList.remove('hidden');
@@ -197,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  
                  elements.jurisprudenceStatus.style.display = 'none';
                  if (totalJurisprudenceResults > MAX_JURISPRUDENCE_RESULTS) {
-                    showStatus(elements.jurisprudenceStatus, `Let op: er zijn meer dan ${MAX_JURISPRUDENCE_RESULTS} resultaten. Alleen de eerste ${MAX_JURISPRUDENCE_RESULTS} worden geladen.`, 'warning');
+                    showNotification(`Let op: er zijn ${totalJurisprudenceResults} resultaten. De eerste ${MAX_JURISPRUDENCE_RESULTS} worden ingeladen.`, 'warning');
                  }
 
                  const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
@@ -220,8 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadAllJurisprudenceInBackground = async () => {
         if (isJurisprudenceLoadingInBackground) return;
         isJurisprudenceLoadingInBackground = true;
-        elements.backgroundLoader.style.display = 'flex';
-        let from = jurisprudenceMasterResults.length + 1; // Corrected starting point
+        if(elements.backgroundLoader) elements.backgroundLoader.style.display = 'flex';
+        let from = jurisprudenceMasterResults.length + 1;
         const maxToFetch = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
 
         while(from <= maxToFetch) {
@@ -241,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
              } catch (error) { break; }
         }
         isJurisprudenceLoadingInBackground = false;
-        elements.backgroundLoader.style.display = 'none';
+        if(elements.backgroundLoader) elements.backgroundLoader.style.display = 'none';
         showNotification(`Alle ${jurisprudenceMasterResults.length} resultaten zijn geladen.`, 'success');
         handleRefineSearch();
     };
@@ -252,9 +250,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const summary = entry.querySelector('summary')?.textContent || 'Geen samenvatting.';
         const link = entry.querySelector('link')?.getAttribute('href') || '#';
         
-        let instantie = 'N/A', uitspraakdatum = 'N/A', zaaknummer = 'N/A', procedure = 'N/A', betrokkenen = 'N/A', dateObject = null;
+        let instantie = 'N/A', uitspraakdatum = 'N/A', zaaknummer = 'N/A', procedure = 'N/A', betrokkenen = 'N/A', dateObject = null, procedureId = null;
 
-        // Robust parsing from title as a fallback
+        // Fallback parsing from title
         const parts = fullTitle.split(',').map(p => p.trim());
         if (parts.length >= 2) instantie = parts[1];
         if (parts.length >= 3) {
@@ -271,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
             zaaknummer = (zaakSplit.length > 1) ? zaakSplit.slice(1).join('/').trim() : dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
         }
 
-        // Override with more reliable data from <content> if available
+        // Robust parsing from <content> (overrides title parsing if available)
         try {
             const contentXmlString = entry.querySelector('content')?.textContent;
             if (contentXmlString) {
@@ -284,10 +282,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         const node = contentXml.evaluate(`.//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
                         return node ? node.textContent.trim() : null;
                     };
-                    
+                    const getSafeAttribute = (selector, attribute) => {
+                        const node = contentXml.evaluate(`.//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                        return node ? node.getAttribute(attribute) : null;
+                    };
+
                     instantie = getSafeText('dcterms:creator') || instantie;
                     zaaknummer = getSafeText('psi:zaaknummer') || zaaknummer;
                     procedure = getSafeText('psi:procedure') || procedure;
+                    procedureId = getSafeAttribute('psi:procedure', 'resourceIdentifier') || null;
                     betrokkenen = getSafeText('dcterms:contributor') || betrokkenen;
                     const decisionDateRaw = getSafeText('dcterms:date');
                     if(decisionDateRaw) {
@@ -300,10 +303,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } catch (e) {
-            // Fallback to title parsing is sufficient
+            // Silently fail, fall back to title parsing
         }
 
-        return { title: fullTitle, ecli, summary, link, instantie, uitspraakdatum, zaaknummer, procedure, betrokkenen, dateObject };
+        return { title: fullTitle, ecli, summary, link, instantie, uitspraakdatum, zaaknummer, procedure, procedureId, betrokkenen, dateObject };
     };
 
 
@@ -317,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         jurisprudenceCurrentResults = jurisprudenceMasterResults.filter(item => {
             const keywordMatch = !keyword || searchIn.some(field => item[field] && item[field].toLowerCase().includes(keyword));
-            const procedureMatch = !procedure || (item.procedure && item.procedure.toLowerCase() === procedure.toLowerCase());
+            const procedureMatch = !procedure || item.procedureId === procedure;
             const zaaknummerMatch = !zaaknummer || (item.zaaknummer && item.zaaknummer.toLowerCase().includes(zaaknummer));
             const betrokkenenMatch = !betrokkenen || (item.betrokkenen && item.betrokkenen.toLowerCase().includes(betrokkenen));
             return keywordMatch && procedureMatch && zaaknummerMatch && betrokkenenMatch;
