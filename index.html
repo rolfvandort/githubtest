@@ -32,25 +32,16 @@
                         <h2>Jurisprudentie Zoeker</h2>
                     </div>
                     <div class="card-body">
-                        <div class="quick-search-section">
-                            <div class="search-input-container">
-                                <input type="text" id="quickSearchInput" placeholder="Zoek op trefwoord, ECLI, zaaknummer..." class="quick-search-input">
-                                <button class="quick-search-button" id="quickSearchButton">
-                                    <span>🔍</span>
-                                </button>
-                            </div>
-                        </div>
-
                         <div class="filter-toggle-container">
                             <button class="tertiary-button" id="showFiltersButton">
-                                <span id="filterToggleIcon">▼</span> Geavanceerd zoeken
+                                <span id="filterToggleIcon">▼</span> Zoeken met filters
                             </button>
                             <button class="reset-button" id="resetFiltersButton" style="display: none;">
                                 Filters wissen
                             </button>
                         </div>
 
-                        <div id="apiFilters" class="filters-section" style="display: none;">
+                        <div id="apiFilters" class="filters-section" style="display: block;">
                             <div class="filter-section">
                                 <div class="advanced-filter-grid">
                                     
@@ -137,20 +128,25 @@
                             <div id="activeFilters" class="active-filters-container"></div>
                         </div>
 
-                        <div id="smartSearchSection" class="smart-search-section hidden">
+                        <div id="keywordSearchSection" class="smart-search-section hidden">
                             <hr class="separator">
                             <div class="filter-section">
-                                <h3>Verfijn resultaten</h3>
+                                <div class="section-header-tooltip">
+                                    <h3>Filter resultaten op trefwoord</h3>
+                                    <span class="tooltip-icon">?
+                                        <span class="tooltip-text">Filtert alleen de resultaten die op basis van de bovenstaande criteria zijn opgehaald. Gebruik de filters (zoals periode of rechtsgebied) om relevantere uitspraken te laden.</span>
+                                    </span>
+                                </div>
                                 <div class="smart-search-controls">
                                     <div class="filter-group">
-                                        <label for="smartSearchInput">Zoek binnen resultaten</label>
+                                        <label for="keywordSearchInput">Zoek binnen geladen resultaten</label>
                                         <div class="search-input-container">
-                                            <input type="text" id="smartSearchInput" placeholder="Zoek op trefwoord..." class="filter-input">
+                                            <input type="text" id="keywordSearchInput" placeholder="Filter op trefwoord..." class="filter-input">
                                              <div id="backgroundLoader" class="background-loader" style="display: none;">
                                                 <div class="spinner-small"></div>
                                                 <span>Meer laden...</span>
                                             </div>
-                                            <button class="secondary-button" id="smartFilterButton">Filter</button>
+                                            <button class="secondary-button" id="keywordFilterButton">Filter</button>
                                         </div>
                                     </div>
                                     <div class="filter-group">
