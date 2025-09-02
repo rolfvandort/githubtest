@@ -32,30 +32,35 @@
                         <h2>Jurisprudentie Zoeker</h2>
                     </div>
                     <div class="card-body">
-                        <div class="filter-toggle-container">
-                            <button class="tertiary-button" id="showFiltersButton">
-                                <span id="filterToggleIcon">▼</span> Zoeken met filters
-                            </button>
-                            <button class="reset-button" id="resetFiltersButton" style="display: none;">
-                                Filters wissen
-                            </button>
-                        </div>
+                        <div id="apiFiltersContainer">
+                            <div class="filter-toggle-container">
+                                <button class="tertiary-button" id="showFiltersButton">
+                                    <span id="filterToggleIcon">▲</span> Zoeken met filters
+                                </button>
+                                <button class="reset-button" id="resetFiltersButton">
+                                    Filters wissen
+                                </button>
+                            </div>
 
-                        <div id="apiFilters" class="filters-section" style="display: block;">
-                            <div class="filter-section">
-                                <div class="advanced-filter-grid">
-                                    
-                                    <div class="filter-group date-range-group" id="dateFilters">
-                                        <label>Periode</label>
-                                        <div class="date-inputs-container">
+                            <div id="apiFilters" class="filters-section">
+                                <div class="filter-section">
+                                    <div class="advanced-filter-grid">
+                                        
+                                        <div class="filter-group date-range-group" id="dateFilters">
+                                            <label>Periode</label>
+                                            <div class="date-inputs" id="customDateRange">
+                                                <input type="date" id="dateFrom" class="filter-input" placeholder="Van datum">
+                                                <span class="date-separator">tot</span>
+                                                <input type="date" id="dateTo" class="filter-input" placeholder="Tot datum">
+                                            </div>
+                                            <div class="period-separator">OF</div>
                                             <select id="periodPreset" class="filter-input">
-                                                <option value="">-- Selecteer periode --</option>
+                                                <option value="">-- Selecteer een vaste periode --</option>
                                                 <option value="last-month">Laatste maand</option>
                                                 <option value="last-3-months">Laatste 3 maanden</option>
                                                 <option value="last-6-months">Laatste 6 maanden</option>
                                                 <option value="this-year">Dit jaar</option>
                                                 <option value="last-year">Vorig jaar</option>
-                                                <option value="custom">Aangepaste periode...</option>
                                             </select>
                                             <div id="dateTypeSelector" class="filter-group">
                                                 <label for="dateFilterType">Filter op:</label>
@@ -64,56 +69,43 @@
                                                     <option value="wijzigingsdatum">Wijzigingsdatum</option>
                                                 </select>
                                             </div>
-                                            <div class="date-inputs" id="customDateRange" style="display: none;">
-                                                <input type="date" id="dateFrom" class="filter-input" placeholder="Van datum">
-                                                <span class="date-separator">tot</span>
-                                                <input type="date" id="dateTo" class="filter-input" placeholder="Tot datum">
+                                        </div>
+
+                                        <div class="filter-group">
+                                            <label for="subject">Rechtsgebied</label>
+                                            <select id="subject" class="filter-input">
+                                                <option value="">-- Alle rechtsgebieden --</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group autocomplete-container">
+                                            <label for="creator">Instantie</label>
+                                            <div class="input-with-clear">
+                                                <input type="text" id="creator" class="filter-input" placeholder="Begin met typen...">
+                                                <button type="button" class="clear-input" id="clearCreator" style="display: none;">✕</button>
+                                            </div>
+                                            <div id="creatorSuggestions" class="autocomplete-suggestions"></div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label>Type Document</label>
+                                            <div class="radio-group">
+                                                <label class="radio-option"><input type="radio" name="documentType" value="" checked><span class="radio-custom"></span>Alle</label>
+                                                <label class="radio-option"><input type="radio" name="documentType" value="Uitspraak"><span class="radio-custom"></span>Uitspraak</label>
+                                                <label class="radio-option"><input type="radio" name="documentType" value="Conclusie"><span class="radio-custom"></span>Conclusie</label>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="filter-group">
-                                        <label for="subject">Rechtsgebied</label>
-                                        <select id="subject" class="filter-input">
-                                            <option value="">-- Alle rechtsgebieden --</option>
-                                        </select>
-                                    </div>
-                                    <div class="filter-group autocomplete-container">
-                                        <label for="creator">Instantie</label>
-                                        <div class="input-with-clear">
-                                            <input type="text" id="creator" class="filter-input" placeholder="Begin met typen...">
-                                            <button type="button" class="clear-input" id="clearCreator" style="display: none;">✕</button>
+                                         <div class="filter-group">
+                                            <label for="sortOrder">Sortering (op ingeladen resultaten)</label>
+                                            <select id="sortOrder" class="filter-input">
+                                                <option value="date-desc" selected>Nieuwste eerst (uitspraak)</option>
+                                                <option value="date-asc">Oudste eerst (uitspraak)</option>
+                                            </select>
                                         </div>
-                                        <div id="creatorSuggestions" class="autocomplete-suggestions"></div>
-                                    </div>
-                                    <div class="filter-group">
-                                        <label for="procedure">Procedure</label>
-                                        <select id="procedure" class="filter-input">
-                                            <option value="">-- Alle procedures --</option>
-                                        </select>
-                                    </div>
-                                    <div class="filter-group">
-                                        <label>Type Document</label>
-                                        <div class="radio-group">
-                                            <label class="radio-option"><input type="radio" name="documentType" value="" checked><span class="radio-custom"></span>Alle</label>
-                                            <label class="radio-option"><input type="radio" name="documentType" value="Uitspraak"><span class="radio-custom"></span>Uitspraak</label>
-                                            <label class="radio-option"><input type="radio" name="documentType" value="Conclusie"><span class="radio-custom"></span>Conclusie</label>
-                                        </div>
-                                    </div>
-
-                                     <div class="filter-group">
-                                        <label for="sortOrder">Sortering</label>
-                                        <select id="sortOrder" class="filter-input">
-                                            <option value="DESC" selected>Nieuwste eerst (publicatie)</option>
-                                            <option value="ASC">Oudste eerst (publicatie)</option>
-                                            <option value="date-desc">Nieuwste eerst (uitspraak)</option>
-                                            <option value="date-asc">Oudste eerst (uitspraak)</option>
-                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="action-buttons">
-                                <button class="primary-button" id="apiSearchButton"><span class="button-icon"></span> Zoek uitspraken</button>
+                                <div class="action-buttons">
+                                    <button class="primary-button" id="apiSearchButton"><span class="button-icon"></span> Zoek uitspraken</button>
+                                </div>
                             </div>
                         </div>
 
@@ -124,39 +116,42 @@
                         </div>
                         
                         <div id="resultsHeader" class="results-header" style="display: none;">
-                            <div id="totalResultsText"></div>
+                            <div class="results-counters">
+                                <div id="totalResultsText"></div>
+                                <div id="refinedTotalResultsText"></div>
+                            </div>
                             <div id="activeFilters" class="active-filters-container"></div>
                         </div>
 
-                        <div id="keywordSearchSection" class="smart-search-section hidden">
+                        <div id="refineFiltersSection" class="smart-search-section hidden">
                             <hr class="separator">
                             <div class="filter-section">
-                                <div class="section-header-tooltip">
-                                    <h3>Filter resultaten op trefwoord</h3>
-                                    <span class="tooltip-icon">?
-                                        <span class="tooltip-text">Filtert alleen de resultaten die op basis van de bovenstaande criteria zijn opgehaald. Gebruik de filters (zoals periode of rechtsgebied) om relevantere uitspraken te laden.</span>
-                                    </span>
-                                </div>
-                                <div class="smart-search-controls">
+                                <h3>Verfijn Resultaten</h3>
+                                <div class="advanced-filter-grid">
                                     <div class="filter-group">
-                                        <label for="keywordSearchInput">Zoek binnen geladen resultaten</label>
-                                        <div class="search-input-container">
-                                            <input type="text" id="keywordSearchInput" placeholder="Filter op trefwoord..." class="filter-input">
-                                             <div id="backgroundLoader" class="background-loader" style="display: none;">
-                                                <div class="spinner-small"></div>
-                                                <span>Meer laden...</span>
-                                            </div>
-                                            <button class="secondary-button" id="keywordFilterButton">Filter</button>
-                                        </div>
-                                    </div>
-                                    <div class="filter-group">
-                                        <label>Zoek in:</label>
-                                        <div class="checkbox-group">
+                                        <label for="keywordSearchInput">Trefwoord</label>
+                                        <input type="text" id="keywordSearchInput" placeholder="Filter op trefwoord..." class="filter-input">
+                                        <div class="checkbox-group inline">
                                             <label class="checkbox-option"><input type="checkbox" name="searchIn" value="title" checked><span class="checkmark"></span>Titel</label>
                                             <label class="checkbox-option"><input type="checkbox" name="searchIn" value="summary" checked><span class="checkmark"></span>Samenvatting</label>
-                                            <label class="checkbox-option"><input type="checkbox" name="searchIn" value="ecli"><span class="checkmark"></span>ECLI</label>
+                                            <label class="checkbox-option"><input type="checkbox" name="searchIn" value="ecli" checked><span class="checkmark"></span>ECLI</label>
                                         </div>
                                     </div>
+                                    <div class="filter-group">
+                                        <label for="procedureRefine">Procedure</label>
+                                        <select id="procedureRefine" class="filter-input"></select>
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="zaaknummerRefine">Zaaknummer</label>
+                                        <input type="text" id="zaaknummerRefine" placeholder="Filter op zaaknummer..." class="filter-input">
+                                    </div>
+                                    <div class="filter-group">
+                                        <label for="betrokkenenRefine">Betrokkenen</label>
+                                        <input type="text" id="betrokkenenRefine" placeholder="Filter op rechter, etc..." class="filter-input">
+                                    </div>
+                                </div>
+                                <div class="action-buttons">
+                                    <button class="secondary-button" id="refineSearchButton">Filter</button>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +208,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="script.js"></script>
 </body>
