@@ -148,12 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const fromDate = elements.dateFrom.value;
         const toDate = elements.dateTo.value;
     
-        if (dateType === 'uitspraakdatum') {
-            if (fromDate) params.append('date', fromDate);
-            if (toDate) params.append('date', toDate);
-        } else if (dateType === 'wijzigingsdatum') {
-            if (fromDate) params.append('modified', `${fromDate}T00:00:00`);
-            if (toDate) params.append('modified', `${toDate}T23:59:59`);
+        if (dateType === 'uitspraakdatum' && fromDate && toDate) {
+            params.append('date', fromDate);
+            params.append('date', toDate);
+        } else if (dateType === 'wijzigingsdatum' && fromDate && toDate) {
+            params.append('modified', `${fromDate}T00:00:00`);
+            params.append('modified', `${toDate}T23:59:59`);
         }
     
         if (elements.subject.value) params.append('subject', elements.subject.value);
@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  }
 
                  const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
-                 const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
+                 const newResults = await Promise.all(entries.map(entry => parseJurisprudenceEntry(entry)));
                  jurisprudenceMasterResults.push(...newResults);
                  
                  handleRefineSearch();
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
                 const entries = Array.from(xmlDoc.getElementsByTagName('entry'));
                 if(entries.length === 0) break;
-                const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
+                const newResults = await Promise.all(entries.map(entry => parseJurisprudenceEntry(entry)));
                 jurisprudenceMasterResults.push(...newResults);
                 handleRefineSearch();
                 from += entries.length;
@@ -244,42 +244,47 @@ document.addEventListener('DOMContentLoaded', () => {
         handleRefineSearch();
     };
 
-    const parseJurisprudenceEntry = (entry) => {
-        const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel';
+    const parseJurisprudenceEntry = async (entry) => {
         const ecli = entry.querySelector('id')?.textContent || 'Geen ECLI';
-        const summary = entry.querySelector('summary')?.textContent || 'Geen samenvatting.';
-        const link = entry.querySelector('link')?.getAttribute('href') || '#';
-        
-        const contentXmlString = entry.querySelector('content')?.textContent || '<rdf:RDF></rdf:RDF>';
-        const parser = new DOMParser();
-        const contentXml = parser.parseFromString(contentXmlString, "application/xml");
-        const description = contentXml.querySelector('Description');
+        const link = `https://data.rechtspraak.nl/uitspraken/content?id=${ecli}`;
+        const requestUrl = `${PROXY_URL}${encodeURIComponent(link)}`;
 
-        const nsResolver = (prefix) => {
-            const ns = {
-                'dcterms': 'http://purl.org/dc/terms/',
-                'psi': 'http://psi.rechtspraak.nl/'
-            };
-            return ns[prefix] || null;
-        };
+        let details = { procedure: 'N/A', zaaknummer: 'N/A', betrokkenen: 'N/A', dateObject: null, uitspraakdatum: 'N/A' };
 
-        const getSafeText = (selector) => {
-            if (!description) return '';
-            const node = contentXml.evaluate(`//${selector}`, description, nsResolver, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            return node ? node.textContent : '';
-        };
+        try {
+            const response = await fetch(requestUrl);
+            if (response.ok) {
+                const xmlString = await response.text();
+                const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
+                const description = xmlDoc.querySelector('rdf\\:Description, Description');
+                
+                if (description) {
+                    const procedureNode = description.querySelector('procedure, psi\\:procedure');
+                    details.procedure = procedureNode ? procedureNode.textContent.trim() : 'N/A';
+                    
+                    const zaaknummerNode = description.querySelector('zaaknummer, psi\\:zaaknummer');
+                    details.zaaknummer = zaaknummerNode ? zaaknummerNode.textContent.trim() : 'N/A';
 
-        const decisionDateRaw = getSafeText('dcterms:date');
-        const decisionDateObject = decisionDateRaw ? new Date(decisionDateRaw) : null;
+                    const contributorNode = description.querySelector('contributor, dcterms\\:contributor');
+                    details.betrokkenen = contributorNode ? contributorNode.textContent.trim() : 'N/A';
+                    
+                    const dateNode = description.querySelector('date, dcterms\\:date');
+                    if (dateNode && dateNode.textContent) {
+                        details.dateObject = new Date(dateNode.textContent);
+                        details.uitspraakdatum = details.dateObject.toLocaleDateString('nl-NL');
+                    }
+                }
+            }
+        } catch (e) {
+            // Fout bij ophalen details, blijf bij defaults
+        }
 
         return {
-            title: fullTitle, ecli, summary, link,
-            instantie: getSafeText('dcterms:creator'),
-            uitspraakdatum: decisionDateObject ? decisionDateObject.toLocaleDateString('nl-NL') : 'N/A',
-            zaaknummer: getSafeText('psi:zaaknummer') || 'N/A',
-            procedure: getSafeText('psi:procedure') || 'N/A',
-            betrokkenen: getSafeText('dcterms:contributor') || 'N/A',
-            dateObject: decisionDateObject
+            title: entry.querySelector('title')?.textContent || 'Geen titel',
+            ecli: ecli,
+            summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting.',
+            link: entry.querySelector('link')?.getAttribute('href') || '#',
+            ...details
         };
     };
 
@@ -293,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         jurisprudenceCurrentResults = jurisprudenceMasterResults.filter(item => {
             const keywordMatch = !keyword || searchIn.some(field => item[field] && item[field].toLowerCase().includes(keyword));
-            const procedureMatch = !procedure || (item.procedure && item.procedure.toLowerCase().includes(procedure.toLowerCase()));
+            const procedureMatch = !procedure || (item.procedure && item.procedure.toLowerCase() === procedure.toLowerCase());
             const zaaknummerMatch = !zaaknummer || (item.zaaknummer && item.zaaknummer.toLowerCase().includes(zaaknummer));
             const betrokkenenMatch = !betrokkenen || (item.betrokkenen && item.betrokkenen.toLowerCase().includes(betrokkenen));
             return keywordMatch && procedureMatch && zaaknummerMatch && betrokkenenMatch;
