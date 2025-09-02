@@ -37,16 +37,20 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.apiFilters.classList.remove('collapsed'); 
     };
 
-    const populateSelect = (selectElement, items, defaultOptionText, useId = false) => {
+const populateSelect = (selectElement, items, defaultOptionText, useId = false) => {
         if (!selectElement) return;
         selectElement.innerHTML = `<option value="">-- ${defaultOptionText} --</option>`;
         items.sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
             const opt = document.createElement('option');
+            // Dit is de cruciale regel:
+            // Als useId true is (voor Rechtsgebied), gebruik item.id.
+            // Anders (voor Procedure), gebruik item.name.
             opt.value = useId ? item.id : item.name;
             opt.textContent = item.name;
             selectElement.appendChild(opt);
         });
     };
+    
 
     // --- EVENT LISTENERS ---
     const setupEventListeners = () => {
