@@ -12,103 +12,43 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const proceduresoorten = [
-        { name: 'Artikel 81 RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel81ROzaken' },
-        { name: 'Bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#bodemzaak' },
-        { name: 'Cassatie', id: 'http://psi.rechtspraak.nl/procedure#cassatie' },
-        { name: 'Cassatie in het belang der wet', id: 'http://psi.rechtspraak.nl/procedure#cassatieInHetBelangDerWet' },
-        { name: 'Conservatoire maatregel', id: 'http://psi.rechtspraak.nl/procedure#conservatoireMaatregel' },
-        { name: 'Eerste aanleg - enkelvoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegEnkelvoudig' },
-        { name: 'Eerste aanleg - meervoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegMeervoudig' },
-        { name: 'Eerste en enige aanleg', id: 'http://psi.rechtspraak.nl/procedure#eersteEnEnigeAanleg' },
-        { name: 'Herziening', id: 'http://psi.rechtspraak.nl/procedure#herziening' },
-        { name: 'Hoger beroep', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroep' },
-        { name: 'Hoger beroep kort geding', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroepKortGeding' },
-        { name: 'Kort geding', id: 'http://psi.rechtspraak.nl/procedure#kortGeding' },
-        { name: 'Mondelinge uitspraak', id: 'http://psi.rechtspraak.nl/procedure#mondelingeUitspraak' },
-        { name: 'Peek', id: 'http://psi.rechtspraak.nl/procedure#peek' },
-        { name: 'Prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleBeslissing' },
-        { name: 'Prejudicieel verzoek', id: 'http://psi.rechtspraak.nl/procedure#prejudicieelVerzoek' },
-        { name: 'Prejudiciële spoedprocedure (PPU)', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleSpoedprocedure(PPU)' },
-        { name: 'Proceskostenveroordeling', id: 'http://psi.rechtspraak.nl/procedure#proceskostenveroordeling' },
-        { name: 'Proces-verbaal', id: 'http://psi.rechtspraak.nl/procedure#procesverbaal' },
-        { name: 'Raadkamer', id: 'http://psi.rechtspraak.nl/procedure#raadkamer' },
-        { name: 'Rekestprocedure', id: 'http://psi.rechtspraak.nl/procedure#rekestprocedure' },
-        { name: 'Schadevergoedingsuitspraak', id: 'http://psi.rechtspraak.nl/procedure#schadevergoedingsuitspraak' },
-        { name: 'Tussenuitspraak bestuurlijke lus', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraakBestuurlijkeLus' },
-        { name: 'Uitspraak na prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#uitspraakNaPrejudicieleBeslissing' },
-        { name: 'Vereenvoudigde behandeling', id: 'http://psi.rechtspraak.nl/procedure#vereenvoudigdeBehandeling' },
-        { name: 'Versnelde behandeling', id: 'http://psi.rechtspraak.nl/procedure#versneldeBehandeling' },
-        { name: 'Verstek', id: 'http://psi.rechtspraak.nl/procedure#verstek' },
-        { name: 'Verwijzing na Hoge Raad', id: 'http://psi.rechtspraak.nl/procedure#verwijzingNaHogeRaad' },
-        { name: 'Verzet', id: 'http://psi.rechtspraak.nl/procedure#verzet' },
-        { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' },
-        { name: 'Voorlopige voorziening+bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorzieningbodemzaak' },
-        { name: 'Wraking', id: 'http://psi.rechtspraak.nl/procedure#wraking' },
-        { name: 'Op tegenspraak', id: 'http://psi.rechtspraak.nl/procedure#opTegenspraak' },
-        { name: 'Belemmeringenwet Privaatrecht', id: 'http://psi.rechtspraak.nl/procedure#belemmeringenwetPrivaatrecht' },
-        { name: 'Artikel 80a RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel80aROzaken' },
-        { name: 'Beschikking', id: 'http://psi.rechtspraak.nl/procedure#beschikking' },
-        { name: 'Tussenbeschikking', id: 'http://psi.rechtspraak.nl/procedure#tussenbeschikking' },
-        { name: 'Herroeping', id: 'http://psi.rechtspraak.nl/procedure#herroeping' },
-        { name: 'Verschoning', id: 'http://psi.rechtspraak.nl/procedure#verschoning' },
-        { name: 'Tussenuitspraak', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraak' },
-        { name: 'Geheimhoudingsbeslissing', id: 'http://psi.rechtspraak.nl/procedure#geheimhoudingsbeslissing' },
-        { name: 'NCC', id: 'http://psi.rechtspraak.nl/procedure#NCC' },
-        { name: 'NCCA', id: 'http://psi.rechtspraak.nl/procedure#NCCA' },
-        { name: 'Beslissing RC', id: 'http://psi.rechtspraak.nl/procedure#beslissingRC' }
+        { name: 'Artikel 81 RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel81ROzaken' }, { name: 'Bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#bodemzaak' }, { name: 'Cassatie', id: 'http://psi.rechtspraak.nl/procedure#cassatie' }, { name: 'Cassatie in het belang der wet', id: 'http://psi.rechtspraak.nl/procedure#cassatieInHetBelangDerWet' }, { name: 'Conservatoire maatregel', id: 'http://psi.rechtspraak.nl/procedure#conservatoireMaatregel' }, { name: 'Eerste aanleg - enkelvoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegEnkelvoudig' }, { name: 'Eerste aanleg - meervoudig', id: 'http://psi.rechtspraak.nl/procedure#eersteAanlegMeervoudig' }, { name: 'Eerste en enige aanleg', id: 'http://psi.rechtspraak.nl/procedure#eersteEnEnigeAanleg' }, { name: 'Herziening', id: 'http://psi.rechtspraak.nl/procedure#herziening' }, { name: 'Hoger beroep', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroep' }, { name: 'Hoger beroep kort geding', id: 'http://psi.rechtspraak.nl/procedure#hogerBeroepKortGeding' }, { name: 'Kort geding', id: 'http://psi.rechtspraak.nl/procedure#kortGeding' }, { name: 'Mondelinge uitspraak', id: 'http://psi.rechtspraak.nl/procedure#mondelingeUitspraak' }, { name: 'Peek', id: 'http://psi.rechtspraak.nl/procedure#peek' }, { name: 'Prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleBeslissing' }, { name: 'Prejudicieel verzoek', id: 'http://psi.rechtspraak.nl/procedure#prejudicieelVerzoek' }, { name: 'Prejudiciële spoedprocedure (PPU)', id: 'http://psi.rechtspraak.nl/procedure#prejudicieleSpoedprocedure(PPU)' }, { name: 'Proceskostenveroordeling', id: 'http://psi.rechtspraak.nl/procedure#proceskostenveroordeling' }, { name: 'Proces-verbaal', id: 'http://psi.rechtspraak.nl/procedure#procesverbaal' }, { name: 'Raadkamer', id: 'http://psi.rechtspraak.nl/procedure#raadkamer' }, { name: 'Rekestprocedure', id: 'http://psi.rechtspraak.nl/procedure#rekestprocedure' }, { name: 'Schadevergoedingsuitspraak', id: 'http://psi.rechtspraak.nl/procedure#schadevergoedingsuitspraak' }, { name: 'Tussenuitspraak bestuurlijke lus', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraakBestuurlijkeLus' }, { name: 'Uitspraak na prejudiciële beslissing', id: 'http://psi.rechtspraak.nl/procedure#uitspraakNaPrejudicieleBeslissing' }, { name: 'Vereenvoudigde behandeling', id: 'http://psi.rechtspraak.nl/procedure#vereenvoudigdeBehandeling' }, { name: 'Versnelde behandeling', id: 'http://psi.rechtspraak.nl/procedure#versneldeBehandeling' }, { name: 'Verstek', id: 'http://psi.rechtspraak.nl/procedure#verstek' }, { name: 'Verwijzing na Hoge Raad', id: 'http://psi.rechtspraak.nl/procedure#verwijzingNaHogeRaad' }, { name: 'Verzet', id: 'http://psi.rechtspraak.nl/procedure#verzet' }, { name: 'Voorlopige voorziening', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorziening' }, { name: 'Voorlopige voorziening+bodemzaak', id: 'http://psi.rechtspraak.nl/procedure#voorlopigeVoorzieningbodemzaak' }, { name: 'Wraking', id: 'http://psi.rechtspraak.nl/procedure#wraking' }, { name: 'Op tegenspraak', id: 'http://psi.rechtspraak.nl/procedure#opTegenspraak' }, { name: 'Belemmeringenwet Privaatrecht', id: 'http://psi.rechtspraak.nl/procedure#belemmeringenwetPrivaatrecht' }, { name: 'Artikel 80a RO-zaken', id: 'http://psi.rechtspraak.nl/procedure#artikel80aROzaken' }, { name: 'Beschikking', id: 'http://psi.rechtspraak.nl/procedure#beschikking' }, { name: 'Tussenbeschikking', id: 'http://psi.rechtspraak.nl/procedure#tussenbeschikking' }, { name: 'Herroeping', id: 'http://psi.rechtspraak.nl/procedure#herroeping' }, { name: 'Verschoning', id: 'http://psi.rechtspraak.nl/procedure#verschoning' }, { name: 'Tussenuitspraak', id: 'http://psi.rechtspraak.nl/procedure#tussenuitspraak' }, { name: 'Geheimhoudingsbeslissing', id: 'http://psi.rechtspraak.nl/procedure#geheimhoudingsbeslissing' }, { name: 'NCC', id: 'http://psi.rechtspraak.nl/procedure#NCC' }, { name: 'NCCA', id: 'http://psi.rechtspraak.nl/procedure#NCCA' }, { name: 'Beslissing RC', id: 'http://psi.rechtspraak.nl/procedure#beslissingRC' }
     ];
 
     const instanties = [
-        { name: "Hoge Raad", id: "http://standaarden.overheid.nl/owms/terms/Hoge_Raad_der_Nederlanden" },
-        { name: "Raad van State", id: "http://standaarden.overheid.nl/owms/terms/Raad_van_State" },
-        { name: "Centrale Raad van Beroep", id: "http://standaarden.overheid.nl/owms/terms/Centrale_Raad_van_Beroep" },
-        { name: "College van Beroep voor het bedrijfsleven", id: "http://standaarden.overheid.nl/owms/terms/College_van_Beroep_voor_het_bedrijfsleven" },
-        { name: "Rechtbank Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Amsterdam" },
-        { name: "Rechtbank Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Den_Haag" },
-        { name: "Rechtbank Gelderland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Gelderland" },
-        { name: "Rechtbank Limburg", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Limburg" },
-        { name: "Rechtbank Midden-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Midden-Nederland" },
-        { name: "Rechtbank Noord-Holland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Holland" },
-        { name: "Rechtbank Noord-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Nederland" },
-        { name: "Rechtbank Oost-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Oost-Brabant" },
-        { name: "Rechtbank Overijssel", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Overijssel" },
-        { name: "Rechtbank Rotterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Rotterdam" },
-        { name: "Rechtbank Zeeland-West-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Zeeland-West-Brabant" },
-        { name: "Gerechtshof Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Amsterdam" },
-        { name: "Gerechtshof Arnhem-Leeuwarden", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Arnhem-Leeuwarden" },
-        { name: "Gerechtshof Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Den_Haag" },
-        { name: "Gerechtshof 's-Hertogenbosch", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_'s-Hertogenbosch" }
+        { name: "Hoge Raad", id: "http://standaarden.overheid.nl/owms/terms/Hoge_Raad_der_Nederlanden" }, { name: "Raad van State", id: "http://standaarden.overheid.nl/owms/terms/Raad_van_State" }, { name: "Centrale Raad van Beroep", id: "http://standaarden.overheid.nl/owms/terms/Centrale_Raad_van_Beroep" }, { name: "College van Beroep voor het bedrijfsleven", id: "http://standaarden.overheid.nl/owms/terms/College_van_Beroep_voor_het_bedrijfsleven" }, { name: "Rechtbank Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Amsterdam" }, { name: "Rechtbank Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Den_Haag" }, { name: "Rechtbank Gelderland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Gelderland" }, { name: "Rechtbank Limburg", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Limburg" }, { name: "Rechtbank Midden-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Midden-Nederland" }, { name: "Rechtbank Noord-Holland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Holland" }, { name: "Rechtbank Noord-Nederland", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Noord-Nederland" }, { name: "Rechtbank Oost-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Oost-Brabant" }, { name: "Rechtbank Overijssel", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Overijssel" }, { name: "Rechtbank Rotterdam", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Rotterdam" }, { name: "Rechtbank Zeeland-West-Brabant", id: "http://standaarden.overheid.nl/owms/terms/Rechtbank_Zeeland-West-Brabant" }, { name: "Gerechtshof Amsterdam", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Amsterdam" }, { name: "Gerechtshof Arnhem-Leeuwarden", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Arnhem-Leeuwarden" }, { name: "Gerechtshof Den Haag", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_Den_Haag" }, { name: "Gerechtshof 's-Hertogenbosch", id: "http://standaarden.overheid.nl/owms/terms/Gerechtshof_'s-Hertogenbosch" }
     ];
 
     // --- DOM ELEMENTEN ---
     const elements = {
-        mainContainer: document.getElementById('mainContainer'),
-        jurisprudenceCard: document.getElementById('jurisprudenceCard'),
+        apiFiltersContainer: document.getElementById('apiFiltersContainer'),
         apiFilters: document.getElementById('apiFilters'),
         showFiltersButton: document.getElementById('showFiltersButton'),
         resetFiltersButton: document.getElementById('resetFiltersButton'),
         periodPreset: document.getElementById('periodPreset'),
-        customDateRange: document.getElementById('customDateRange'),
-        dateFilterType: document.getElementById('dateFilterType'),
         dateFrom: document.getElementById('dateFrom'),
         dateTo: document.getElementById('dateTo'),
+        dateFilterType: document.getElementById('dateFilterType'),
         subject: document.getElementById('subject'),
-        procedure: document.getElementById('procedure'),
-        sortOrder: document.getElementById('sortOrder'),
         creator: document.getElementById('creator'),
         clearCreator: document.getElementById('clearCreator'),
         creatorSuggestions: document.getElementById('creatorSuggestions'),
+        sortOrder: document.getElementById('sortOrder'),
         apiSearchButton: document.getElementById('apiSearchButton'),
-        keywordFilterButton: document.getElementById('keywordFilterButton'),
         loadingIndicator: document.getElementById('loadingIndicator'),
+        jurisprudenceStatus: document.getElementById('jurisprudenceStatus'),
         resultsHeader: document.getElementById('resultsHeader'),
         totalResultsText: document.getElementById('totalResultsText'),
+        refinedTotalResultsText: document.getElementById('refinedTotalResultsText'),
         activeFilters: document.getElementById('activeFilters'),
-        keywordSearchSection: document.getElementById('keywordSearchSection'),
+        refineFiltersSection: document.getElementById('refineFiltersSection'),
         keywordSearchInput: document.getElementById('keywordSearchInput'),
-        backgroundLoader: document.getElementById('backgroundLoader'),
         searchInCheckboxes: document.querySelectorAll('input[name="searchIn"]'),
-        jurisprudenceStatus: document.getElementById('jurisprudenceStatus'),
+        procedureRefine: document.getElementById('procedureRefine'),
+        zaaknummerRefine: document.getElementById('zaaknummerRefine'),
+        betrokkenenRefine: document.getElementById('betrokkenenRefine'),
+        refineSearchButton: document.getElementById('refineSearchButton'),
+        backgroundLoader: document.getElementById('backgroundLoader'),
         jurisprudenceResults: document.getElementById('jurisprudenceResults'),
         jurisprudencePagination: document.getElementById('jurisprudencePagination'),
         wettenbankSearchButton: document.getElementById('wettenbankSearchButton'),
@@ -118,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleWettenbankFiltersButton: document.getElementById('toggleWettenbankFiltersButton'),
         wettenbankFacets: document.getElementById('wettenbankFacets'),
         wettenbankPagination: document.getElementById('wettenbankPagination'),
-        documentViewer: document.getElementById('documentViewer'),
         keywordModal: document.getElementById('keywordModal'),
         closeKeywordModal: document.getElementById('closeKeywordModal'),
         keywordOptions: document.getElementById('keywordOptions'),
@@ -140,21 +79,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const wettenbankResultsPerPage = 10;
 
     let debounceTimer = null;
-    let isFiltersVisible = true;
     let isWettenbankFiltersVisible = false;
 
     // --- INITIALISATIE ---
     const initializeApp = () => {
         populateSelect(elements.subject, rechtsgebieden, 'Alle rechtsgebieden');
-        populateSelect(elements.procedure, proceduresoorten, 'Alle procedures');
+        populateSelect(elements.procedureRefine, proceduresoorten, 'Alle procedures');
         setupEventListeners();
+        elements.apiFilters.classList.remove('collapsed'); 
     };
 
     const populateSelect = (selectElement, items, defaultOptionText) => {
+        if (!selectElement) return;
         selectElement.innerHTML = `<option value="">-- ${defaultOptionText} --</option>`;
         items.sort((a, b) => a.name.localeCompare(b.name)).forEach(item => {
             const opt = document.createElement('option');
-            opt.value = item.id;
+            opt.value = item.name; // Filter on name client-side
             opt.textContent = item.name;
             selectElement.appendChild(opt);
         });
@@ -162,19 +102,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- EVENT LISTENERS ---
     const setupEventListeners = () => {
-        elements.showFiltersButton.addEventListener('click', toggleFilters);
+        elements.showFiltersButton.addEventListener('click', toggleApiFilters);
         elements.resetFiltersButton.addEventListener('click', resetAllFilters);
+        
+        elements.dateFrom.addEventListener('change', () => { if(elements.dateTo.value) elements.periodPreset.value = ''; });
+        elements.dateTo.addEventListener('change', () => { if(elements.dateFrom.value) elements.periodPreset.value = ''; });
         elements.periodPreset.addEventListener('change', handlePeriodPresetChange);
+
         elements.creator.addEventListener('input', () => handleAutocompleteDebounced(elements.creator, elements.creatorSuggestions, instanties));
         elements.clearCreator.addEventListener('click', clearCreatorInput);
+        
         elements.apiSearchButton.addEventListener('click', () => handleJurisprudenceSearch(true));
-        elements.keywordSearchInput.addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(filterResultsByKeyword, 300);
-        });
-        elements.keywordFilterButton.addEventListener('click', filterResultsByKeyword);
         elements.sortOrder.addEventListener('change', handleSortChange);
         
+        elements.refineSearchButton.addEventListener('click', handleRefineSearch);
+
         elements.jurisprudenceResults.addEventListener('click', handleResultsClick);
         elements.wettenbankResults.addEventListener('click', handleResultsClick);
 
@@ -190,23 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         elements.closeKeywordModal.addEventListener('click', hideKeywordModal);
         elements.searchWithKeywordsButton.addEventListener('click', searchWithSelectedKeywords);
-        elements.keywordModal.addEventListener('click', (e) => {
-            if (e.target.id === 'keywordModal') {
-                hideKeywordModal();
-            }
-        });
-
         document.addEventListener('click', (e) => { if (!e.target.closest('.autocomplete-container')) { elements.creatorSuggestions.innerHTML = ''; } });
     };
 
     // --- FILTER MANAGEMENT ---
-    const toggleFilters = () => {
-        isFiltersVisible = !isFiltersVisible;
-        elements.apiFilters.style.display = isFiltersVisible ? 'block' : 'none';
-        elements.showFiltersButton.innerHTML = `<span id="filterToggleIcon">${isFiltersVisible ? '▲' : '▼'}</span> ${isFiltersVisible ? 'Verberg filters' : 'Zoeken met filters'}`;
-        elements.resetFiltersButton.style.display = isFiltersVisible ? 'inline-flex' : 'none';
+    const toggleApiFilters = () => {
+        const isCollapsed = elements.apiFilters.classList.toggle('collapsed');
+        elements.showFiltersButton.innerHTML = `<span id="filterToggleIcon">${isCollapsed ? '▼' : '▲'}</span> ${isCollapsed ? 'Toon zoekfilters' : 'Verberg zoekfilters'}`;
     };
-
+    
     const toggleWettenbankFilters = () => {
         isWettenbankFiltersVisible = !isWettenbankFiltersVisible;
         elements.wettenbankFacets.style.display = isWettenbankFiltersVisible ? 'block' : 'none';
@@ -214,19 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const resetAllFilters = () => {
-        elements.apiFilters.querySelectorAll('input, select').forEach(el => {
-            if (el.type === 'radio' || el.type === 'checkbox') {
-                el.checked = false;
-            } else {
-                el.value = '';
-            }
+        document.getElementById('apiFiltersContainer').querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
+            else el.value = '';
         });
+        document.getElementById('refineFiltersSection').querySelectorAll('input, select').forEach(el => el.value = '');
+        
         document.querySelector('input[name="documentType"][value=""]').checked = true;
-        elements.sortOrder.value = 'DESC';
+        elements.sortOrder.value = 'date-desc';
         elements.dateFilterType.value = 'uitspraakdatum';
-        elements.keywordSearchInput.value = '';
         elements.creator.removeAttribute('data-id');
-        elements.customDateRange.style.display = 'none';
         elements.clearCreator.style.display = 'none';
         
         jurisprudenceMasterResults = [];
@@ -240,16 +171,22 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.jurisprudenceStatus.style.display = 'none';
         elements.resultsHeader.style.display = 'none';
         elements.activeFilters.innerHTML = '';
-        elements.keywordSearchSection.classList.add('hidden');
+        elements.refineFiltersSection.classList.add('hidden');
+        elements.apiFilters.classList.remove('collapsed');
+        elements.showFiltersButton.innerHTML = `<span id="filterToggleIcon">▲</span> Zoeken met filters`;
+
         showNotification('Alle filters zijn gewist.', 'success');
     };
 
     const handlePeriodPresetChange = () => {
         const preset = elements.periodPreset.value;
-        const today = new Date();
-        elements.customDateRange.style.display = preset === 'custom' ? 'flex' : 'none';
-        if (preset === 'custom') { elements.dateFrom.value = ''; elements.dateTo.value = ''; return; }
+        if (!preset) {
+            elements.dateFrom.value = '';
+            elements.dateTo.value = '';
+            return;
+        }
         
+        const today = new Date();
         let fromDate = new Date();
         let toDate = new Date();
         
@@ -259,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'last-6-months': fromDate.setMonth(today.getMonth() - 6); break;
             case 'this-year': fromDate = new Date(today.getFullYear(), 0, 1); break;
             case 'last-year': fromDate = new Date(today.getFullYear() - 1, 0, 1); toDate = new Date(today.getFullYear() - 1, 11, 31); break;
-            default: elements.dateFrom.value = ''; elements.dateTo.value = ''; return;
         }
         elements.dateFrom.value = fromDate.toISOString().split('T')[0];
         elements.dateTo.value = toDate.toISOString().split('T')[0];
@@ -292,35 +228,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCreatorInput = () => { elements.creator.value = ''; elements.creator.removeAttribute('data-id'); elements.creatorSuggestions.innerHTML = ''; elements.clearCreator.style.display = 'none'; };
 
     // --- ZOEKFUNCTIES (JURISPRUDENTIE) ---
-    const buildJurisprudenceParams = (from = 0, includeSort = false) => {
+    const buildJurisprudenceParams = (from = 0) => {
         const params = new URLSearchParams();
-        const dateType = elements.dateFilterType.value;
-    
-        if (dateType === 'uitspraakdatum') {
-            if (elements.dateFrom.value) params.append('date', elements.dateFrom.value);
-            if (elements.dateTo.value) params.append('date', elements.dateTo.value);
-        } else if (dateType === 'wijzigingsdatum') {
-            if (elements.dateFrom.value) params.append('modified', `${elements.dateFrom.value}T00:00:00`);
-            if (elements.dateTo.value) params.append('modified', `${elements.dateTo.value}T23:59:59`);
-        }
-    
+        if (elements.dateFrom.value) params.append(elements.dateFilterType.value === 'uitspraakdatum' ? 'date' : 'modified', elements.dateFrom.value);
+        if (elements.dateTo.value) params.append(elements.dateFilterType.value === 'uitspraakdatum' ? 'date' : 'modified', elements.dateTo.value);
         if (elements.subject.value) params.append('subject', elements.subject.value);
-        if (elements.procedure.value) params.append('procedure', elements.procedure.value);
         if (elements.creator.dataset.id) params.append('creator', elements.creator.dataset.id);
         const selectedType = document.querySelector('input[name="documentType"]:checked')?.value;
         if (selectedType) params.append('type', selectedType);
+        
         params.append('return', 'DOC');
-    
-        if (includeSort) {
-            const sortValue = elements.sortOrder.value;
-            if (sortValue === 'ASC' || sortValue === 'DESC') {
-                params.append('sort', sortValue);
-            }
-        }
-    
         params.append('max', '1000');
         params.set('from', from);
-    
         return params;
     };
 
@@ -334,14 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         elements.jurisprudenceResults.innerHTML = '';
         elements.jurisprudencePagination.innerHTML = '';
-        elements.keywordSearchSection.classList.add('hidden');
+        elements.refineFiltersSection.classList.add('hidden');
         elements.resultsHeader.style.display = 'none';
 
         showLoading(true, true);
         displayActiveFilters();
         
-        const includeSort = (elements.sortOrder.value === 'ASC' || elements.sortOrder.value === 'DESC');
-        const params = buildJurisprudenceParams(1, includeSort); 
+        const params = buildJurisprudenceParams(0); 
         const requestUrl = `${PROXY_URL}${encodeURIComponent(`https://data.rechtspraak.nl/uitspraken/zoeken?${params.toString()}`)}`;
 
         try {
@@ -349,9 +267,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status}`);
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
-            if (xmlDoc.getElementsByTagName("parsererror").length) {
-                throw new Error("Fout bij het verwerken van de XML-data.");
-            }
             
             const subtitle = xmlDoc.querySelector('subtitle')?.textContent || '';
             totalJurisprudenceResults = parseInt(subtitle.match(/\d+/)?.[0] || '0', 10);
@@ -359,7 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (totalJurisprudenceResults > 0) {
                  elements.totalResultsText.textContent = `${totalJurisprudenceResults} resultaten gevonden`;
                  elements.resultsHeader.style.display = 'block';
-                 elements.keywordSearchSection.classList.remove('hidden');
+                 elements.refineFiltersSection.classList.remove('hidden');
+                 if (!elements.apiFilters.classList.contains('collapsed')) {
+                    toggleApiFilters();
+                 }
                  
                  if (totalJurisprudenceResults > MAX_JURISPRUDENCE_RESULTS) {
                     showStatus(elements.jurisprudenceStatus, `Let op: er zijn meer dan ${MAX_JURISPRUDENCE_RESULTS} resultaten. Alleen de eerste ${MAX_JURISPRUDENCE_RESULTS} worden geladen. Verfijn uw zoekopdracht voor een completer resultaat.`, 'warning');
@@ -371,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                  jurisprudenceMasterResults.push(...newResults);
                  
-                 sortAndRenderJurisprudence(); 
+                 handleRefineSearch();
                  
                  if(totalJurisprudenceResults > 1000) {
                     loadAllJurisprudenceInBackground();
@@ -396,12 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isJurisprudenceLoadingInBackground = true;
         elements.backgroundLoader.style.display = 'flex';
 
-        let from = jurisprudenceMasterResults.length + 1;
+        let from = jurisprudenceMasterResults.length;
         const maxToFetch = Math.min(totalJurisprudenceResults, MAX_JURISPRUDENCE_RESULTS);
 
-        while(from <= maxToFetch) {
-             const includeSort = (elements.sortOrder.value === 'ASC' || elements.sortOrder.value === 'DESC');
-             const params = buildJurisprudenceParams(from, includeSort);
+        while(from < maxToFetch) {
+             const params = buildJurisprudenceParams(from);
              const requestUrl = `${PROXY_URL}${encodeURIComponent(`https://data.rechtspraak.nl/uitspraken/zoeken?${params.toString()}`)}`;
 
              try {
@@ -416,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newResults = entries.map(entry => parseJurisprudenceEntry(entry));
                 jurisprudenceMasterResults.push(...newResults);
                 
-                sortAndRenderJurisprudence();
+                handleRefineSearch();
 
                 from += entries.length;
 
@@ -430,105 +347,69 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.backgroundLoader.style.display = 'none';
         showNotification(`Alle ${jurisprudenceMasterResults.length} resultaten zijn geladen.`, 'success');
         
-        sortAndRenderJurisprudence();
+        handleRefineSearch();
     };
 
     const parseJurisprudenceEntry = (entry) => {
-        const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel beschikbaar';
+        const fullTitle = entry.querySelector('title')?.textContent || 'Geen titel';
         const ecli = entry.querySelector('id')?.textContent || 'Geen ECLI';
-        const lastUpdatedDateRaw = entry.querySelector('updated')?.textContent;
-        const lastUpdatedDate = lastUpdatedDateRaw ? new Date(lastUpdatedDateRaw) : null;
-        const issuedDateRaw = entry.querySelector('issued')?.textContent;
-        const issuedDate = issuedDateRaw ? new Date(issuedDateRaw) : null;
-        const decisionDateRaw = entry.querySelector('date')?.textContent;
-        let decisionDateObject = decisionDateRaw ? new Date(decisionDateRaw) : null;
-        let uitspraakdatum = decisionDateObject ? decisionDateObject.toLocaleDateString('nl-NL') : 'Niet beschikbaar';
+        const summary = entry.querySelector('summary')?.textContent || 'Geen samenvatting.';
+        const link = entry.querySelector('link')?.getAttribute('href') || '#';
 
-        let instantie = 'N/A';
-        let zaaknummer = 'N/A';
-        const parts = fullTitle.split(',').map(p => p.trim());
-        if (parts.length >= 2) { instantie = parts[1]; }
-        if (parts.length >= 3) {
-            const dateZaakPart = parts[2];
-            if (!decisionDateObject) {
-                const dateMatch = dateZaakPart.match(/(\d{4}-\d{2}-\d{2})/);
-                if (dateMatch) {
-                    const parsedDate = new Date(dateMatch[1]);
-                    if (!isNaN(parsedDate)) {
-                        decisionDateObject = parsedDate;
-                        uitspraakdatum = parsedDate.toLocaleDateString('nl-NL');
-                    }
-                }
-            }
-            const zaakSplit = dateZaakPart.split('/');
-            zaaknummer = zaakSplit.length > 1 ? zaakSplit.slice(1).join('/').trim() : dateZaakPart.replace(/(\d{4}-\d{2}-\d{2})/, '').trim();
-            if (!zaaknummer) zaaknummer = 'Niet beschikbaar';
-        }
+        const parser = new DOMParser();
+        const contentXml = parser.parseFromString(entry.querySelector('content')?.textContent || '<rdf:RDF></rdf:RDF>', "application/xml");
+        const description = contentXml.querySelector('Description');
 
-        if (!decisionDateObject) { decisionDateObject = issuedDate || lastUpdatedDate; }
+        const getSafeText = (selector) => description?.querySelector(selector)?.textContent || '';
+
+        const decisionDateRaw = getSafeText('date');
+        const decisionDateObject = decisionDateRaw ? new Date(decisionDateRaw) : null;
 
         return {
-            title: fullTitle, ecli, instantie, uitspraakdatum, zaaknummer,
-            summary: entry.querySelector('summary')?.textContent || 'Geen samenvatting beschikbaar.',
-            link: entry.querySelector('link')?.getAttribute('href') || '#',
-            dateObject: decisionDateObject,
-            publicatiedatum: issuedDate ? issuedDate.toLocaleDateString('nl-NL') : 'Niet beschikbaar',
-            gewijzigd: lastUpdatedDate ? lastUpdatedDate.toLocaleDateString('nl-NL') : 'Niet beschikbaar'
+            title: fullTitle, ecli, summary, link,
+            instantie: getSafeText('creator'),
+            uitspraakdatum: decisionDateObject ? decisionDateObject.toLocaleDateString('nl-NL') : 'N/A',
+            zaaknummer: getSafeText('zaaknummer') || 'N/A',
+            procedure: getSafeText('procedure') || 'N/A',
+            betrokkenen: getSafeText('contributor') || 'N/A',
+            dateObject: decisionDateObject
         };
     };
-    
-    const sortAndRenderJurisprudence = () => {
-        filterResultsByKeyword(false); // Filter first without re-rendering
 
-        const sortValue = elements.sortOrder.value;
-        if (sortValue === 'date-desc' || sortValue === 'date-asc') {
-             if (jurisprudenceMasterResults.length < totalJurisprudenceResults && !isJurisprudenceLoadingInBackground) {
-                showNotification('Let op: sortering op uitspraakdatum wordt enkel toegepast op de reeds geladen resultaten.', 'warning');
-            }
-            jurisprudenceCurrentResults.sort((a, b) => {
-                const dateA = a.dateObject;
-                const dateB = b.dateObject;
-                if (!dateA || !dateB || isNaN(dateA) || isNaN(dateB)) return 0;
-                return sortValue === 'date-desc' ? dateB - dateA : dateA - dateB;
-            });
-        }
-        
-        renderJurisprudenceResults(); // Now render the sorted and filtered results
-    }
-
-    const filterResultsByKeyword = (shouldRender = true) => {
+    const handleRefineSearch = () => {
         jurisprudenceCurrentPage = 1;
         const keyword = elements.keywordSearchInput.value.toLowerCase().trim();
         const searchIn = Array.from(elements.searchInCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+        const procedure = elements.procedureRefine.value;
+        const zaaknummer = elements.zaaknummerRefine.value.toLowerCase().trim();
+        const betrokkenen = elements.betrokkenenRefine.value.toLowerCase().trim();
 
-        if (keyword && searchIn.length === 0) {
-            jurisprudenceCurrentResults = jurisprudenceMasterResults;
-        } else {
-             jurisprudenceCurrentResults = jurisprudenceMasterResults.filter(item => {
-                if (!keyword) return true;
-                const inTitle = searchIn.includes('title') && item.title.toLowerCase().includes(keyword);
-                const inSummary = searchIn.includes('summary') && item.summary.toLowerCase().includes(keyword);
-                const inEcli = searchIn.includes('ecli') && item.ecli.toLowerCase().includes(keyword);
-                return inTitle || inSummary || inEcli;
-            });
-        }
-        
-        if (shouldRender) {
-            renderJurisprudenceResults();
-        }
+        jurisprudenceCurrentResults = jurisprudenceMasterResults.filter(item => {
+            const keywordMatch = !keyword || (
+                (searchIn.includes('title') && item.title.toLowerCase().includes(keyword)) ||
+                (searchIn.includes('summary') && item.summary.toLowerCase().includes(keyword)) ||
+                (searchIn.includes('ecli') && item.ecli.toLowerCase().includes(keyword))
+            );
+            const procedureMatch = !procedure || item.procedure === procedure;
+            const zaaknummerMatch = !zaaknummer || item.zaaknummer.toLowerCase().includes(zaaknummer);
+            const betrokkenenMatch = !betrokkenen || item.betrokkenen.toLowerCase().includes(betrokkenen);
+            
+            return keywordMatch && procedureMatch && zaaknummerMatch && betrokkenenMatch;
+        });
+
+        handleSortChange();
     };
     
     const handleSortChange = () => {
         const sortValue = elements.sortOrder.value;
-        if (sortValue === 'ASC' || sortValue === 'DESC') {
-            handleJurisprudenceSearch(true);
-            return;
-        }
-        if (jurisprudenceMasterResults.length > 0) {
-            sortAndRenderJurisprudence();
-        } else {
-             showNotification("Voer eerst een zoekopdracht uit voordat u sorteert.", "info");
-        }
+        jurisprudenceCurrentResults.sort((a, b) => {
+            const dateA = a.dateObject;
+            const dateB = b.dateObject;
+            if (!dateA || !dateB) return 0;
+            return sortValue === 'date-desc' ? dateB - dateA : dateA - dateB;
+        });
+        
+        renderJurisprudenceResults();
     };
     
     // --- WETTENBANK SEARCH (SRU 2.0) ---
@@ -576,13 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`API-verzoek mislukt: ${response.status} ${response.statusText}`);
             const xmlString = await response.text();
             const xmlDoc = new DOMParser().parseFromString(xmlString, "application/xml");
-            if (xmlDoc.getElementsByTagName("parsererror").length) throw new Error("Fout bij verwerken XML.");
             
             wettenbankTotalResults = parseInt(xmlDoc.querySelector('numberOfRecords')?.textContent || '0', 10);
             
             if(wettenbankTotalResults === 0) {
                  showStatus(elements.wettenbankStatus, `Geen resultaten gevonden voor "${wettenbankCurrentQuery}"`, 'warning');
-                 elements.wettenbankResults.innerHTML = '<p>Probeer een andere zoekterm.</p>';
                  elements.wettenbankPagination.innerHTML = '';
                  elements.toggleWettenbankFiltersButton.style.display = 'none';
                  return;
@@ -610,14 +489,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!wettenbankActiveFacets[index]) wettenbankActiveFacets[index] = [];
 
         if (checkbox.checked) {
-            if (!wettenbankActiveFacets[index].includes(query)) {
-                wettenbankActiveFacets[index].push(query);
-            }
+            if (!wettenbankActiveFacets[index].includes(query)) wettenbankActiveFacets[index].push(query);
         } else {
             wettenbankActiveFacets[index] = wettenbankActiveFacets[index].filter(q => q !== query);
-            if (wettenbankActiveFacets[index].length === 0) {
-                delete wettenbankActiveFacets[index];
-            }
+            if (wettenbankActiveFacets[index].length === 0) delete wettenbankActiveFacets[index];
         }
         
         wettenbankCurrentPage = 1;
@@ -634,11 +509,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderJurisprudenceResults = () => {
         elements.jurisprudenceResults.innerHTML = '';
+        elements.refinedTotalResultsText.textContent = `${jurisprudenceCurrentResults.length} van ${totalJurisprudenceResults} resultaten worden getoond`;
         const keyword = elements.keywordSearchInput.value.trim().toLowerCase();
         
         const startIndex = (jurisprudenceCurrentPage - 1) * jurisprudenceResultsPerPage;
-        const endIndex = startIndex + jurisprudenceResultsPerPage;
-        const paginatedResults = jurisprudenceCurrentResults.slice(startIndex, endIndex);
+        const paginatedResults = jurisprudenceCurrentResults.slice(startIndex, (startIndex + jurisprudenceResultsPerPage));
 
         paginatedResults.forEach((item, index) => {
             const globalIndex = startIndex + index;
@@ -647,20 +522,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 highlightText(item.title, keyword), 
                 item.link, 
                 highlightText(item.summary, keyword),
-                {
-                    "ECLI": highlightText(item.ecli, keyword),
-                    "Instantie": item.instantie,
-                    "Uitspraakdatum": item.uitspraakdatum,
-                    "Zaaknummer(s)": item.zaaknummer,
-                    "Publicatiedatum": item.publicatiedatum,
-                    "Laatste update": item.gewijzigd
-                },
+                { "ECLI": highlightText(item.ecli, keyword), "Instantie": item.instantie, "Uitspraakdatum": item.uitspraakdatum, "Zaaknummer(s)": item.zaaknummer, "Procedure": item.procedure, "Betrokkenen": item.betrokkenen },
                 `jurisprudence-${globalIndex}`
             );
         });
         
         if (jurisprudenceCurrentResults.length === 0 && totalJurisprudenceResults > 0) {
-            elements.jurisprudenceResults.innerHTML = `<p class="status-message info" style="display:block;">Geen resultaten gevonden met uw filterterm. Wis de term om alle resultaten te zien.</p>`;
+            elements.jurisprudenceResults.innerHTML = `<p class="status-message info" style="display:block;">Geen resultaten gevonden met uw verfijningscriteria. Pas de filters aan om meer resultaten te zien.</p>`;
         }
         
         renderPagination(elements.jurisprudencePagination, jurisprudenceCurrentPage, Math.ceil(jurisprudenceCurrentResults.length / jurisprudenceResultsPerPage), 'jurisprudence');
@@ -672,61 +540,38 @@ document.addEventListener('DOMContentLoaded', () => {
         records.forEach((record, index) => {
             const globalIndex = `wettenbank-${((wettenbankCurrentPage - 1) * wettenbankResultsPerPage) + index}`;
             const meta = record.querySelector('meta');
-            
             const title = meta?.querySelector('title')?.textContent || 'Geen titel';
-            const identifierLink = record.querySelector('preferredUrl')?.textContent || record.querySelector('identifier')?.textContent || '#';
+            const link = record.querySelector('preferredUrl')?.textContent || record.querySelector('identifier')?.textContent || '#';
             const abstract = meta?.querySelector('abstract')?.textContent;
             const creator = meta?.querySelector('creator')?.textContent || 'Onbekend';
             const dateText = meta?.querySelector('date')?.textContent;
             const formattedDate = dateText ? new Date(dateText).toLocaleDateString('nl-NL') : 'Onbekend';
-            
-            let contentHTML;
-            if (abstract) {
-                contentHTML = abstract;
-            } else {
-                const docType = meta?.querySelector('type')?.textContent;
-                const publicationName = record.querySelector('publicatienaam')?.textContent;
-                const subject = meta?.querySelector('subject')?.textContent;
-                contentHTML = `<div class="kenmerken-blok"><strong>Kenmerken:</strong><ul>`;
-                if (docType) contentHTML += `<li><strong>Type:</strong> ${docType}</li>`;
-                if (publicationName) contentHTML += `<li><strong>Publicatie:</strong> ${publicationName}</li>`;
-                if (subject) contentHTML += `<li><strong>Onderwerp:</strong> ${subject}</li>`;
-                contentHTML += `</ul></div>`;
-            }
-
-            html += createResultItemHTML('wettenbank', title, identifierLink, contentHTML, { "Door": creator, "Datum": formattedDate }, globalIndex);
+            html += createResultItemHTML('wettenbank', title, link, abstract || '', { "Door": creator, "Datum": formattedDate }, globalIndex);
         });
         elements.wettenbankResults.innerHTML = html || "<p>Geen documenten gevonden.</p>";
     };
 
     const createResultItemHTML = (type, title, link, content, meta, index) => {
         const metaHTML = Object.entries(meta)
-            .filter(([, value]) => value && value.trim() !== 'N/A' && value.trim() !== '' && value.trim() !== 'Niet beschikbaar')
-            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');       
- 
-        const summaryNeedsToggle = content.length > 350;
-
-        let actionsHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">Bekijk origineel</a>`;
-        if (type === 'jurisprudence') {
-            actionsHTML += `<button class="secondary-button search-related-laws-button" data-summary="${encodeURIComponent(content)}">Zoek gerelateerde wetten</button>`;
-        }
+            .filter(([, value]) => value && value.trim() && value.trim() !== 'N/A')
+            .map(([key, value]) => `<span><strong>${key}:</strong> ${value}</span>`).join('');
+        const actionsHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="tertiary-button">Bekijk origineel</a>` +
+            (type === 'jurisprudence' ? `<button class="secondary-button search-related-laws-button" data-summary="${encodeURIComponent(content)}">Zoek gerelateerde wetten</button>` : '');
     
-        return `
-            <div class="result-item" data-index="${index}">
-                <div>
-                    <div class="result-item-header"><h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3></div>
-                    <div class="meta-info">${metaHTML}</div>
-                    <div class="summary" id="summary-${index}">${content}</div>
-                    ${summaryNeedsToggle ? '<button class="read-more-button" data-action="toggle-summary">Lees meer...</button>' : ''}
-                </div>
-                <div class="result-item-actions">${actionsHTML}</div>
-            </div>`;
+        return `<div class="result-item" data-index="${index}">
+                    <div>
+                        <div class="result-item-header"><h3><a href="${link}" target="_blank" rel="noopener noreferrer">${title}</a></h3></div>
+                        <div class="meta-info">${metaHTML}</div>
+                        <div class="summary" id="summary-${index}">${content}</div>
+                        ${content.length > 350 ? '<button class="read-more-button" data-action="toggle-summary">Lees meer...</button>' : ''}
+                    </div>
+                    <div class="result-item-actions">${actionsHTML}</div>
+                </div>`;
     };
 
     const renderWettenbankFacets = (xmlDoc) => {
         const facets = xmlDoc.querySelectorAll('facet');
         if (facets.length === 0) { 
-            elements.wettenbankFacets.innerHTML = ''; 
             elements.toggleWettenbankFiltersButton.style.display = 'none';
             return; 
         }
@@ -747,17 +592,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         elements.wettenbankFacets.innerHTML = html;
         elements.toggleWettenbankFiltersButton.style.display = 'inline-flex';
-        elements.toggleWettenbankFiltersButton.innerHTML = `<span id="wettenbankFilterToggleIcon">▼</span> Verfijn resultaten`;
     };
 
     const showKeywordModal = (summary) => {
-        const stopWords = new Set(['de', 'het', 'een', 'en', 'van', 'in', 'op', 'met', 'is', 'zijn', 'aan', 'voor', 'door', 'als', 'dat', 'heeft', 'wordt', 'te', 'om', 'uit', 'bij', 'dan', 'naar', 'tot', 'ook', 'niet', 'over', 'onder', 'welke', 'deze', 'dit', 'die', 'er', 'maar', 'zal', 'kan', 'worden', 'heeft', 'artikel', 'bepaalt', 'bepaalde', 'beslissing', 'eiser', 'gedaagde', 'gevolg', 'grond', 'inzake', 'overwegende', 'rechtbank', 'ten', 'uitspraak', 'verweerder', 'volgt', 'zaak']);
-        const keywords = summary.toLowerCase()
-                                .replace(/<[^>]*>/g, "")
-                                .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
-                                .split(/\s+/)
-                                .filter(word => word.length > 3 && !stopWords.has(word));
-        
+        const stopWords = new Set(['de', 'het', 'een', 'en', 'van', 'in', 'op', 'met', 'is', 'zijn', 'aan', 'voor', 'door', 'als', 'dat', 'heeft', 'wordt', 'te', 'om', 'uit', 'bij', 'dan', 'naar', 'tot', 'ook', 'niet', 'over', 'onder', 'welke', 'deze', 'dit', 'die', 'er', 'maar', 'zal', 'kan', 'worden', 'artikel', 'bepaalt', 'bepaalde', 'beslissing', 'eiser', 'gedaagde', 'gevolg', 'grond', 'inzake', 'overwegende', 'rechtbank', 'ten', 'uitspraak', 'verweerder', 'volgt', 'zaak']);
+        const keywords = summary.toLowerCase().replace(/<[^>]*>/g, "").replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(/\s+/).filter(word => word.length > 3 && !stopWords.has(word));
         const uniqueKeywords = [...new Set(keywords)].slice(0, 15);
         
         elements.keywordOptions.innerHTML = '';
@@ -785,7 +624,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.wettenbankKeyword.value = keywordString;
             hideKeywordModal();
             handleWettenbankSearch(true);
-            showNotification(`Zoeken in Wettenbank op: "${keywordString}"`, 'info');
             elements.wettenbankKeyword.scrollIntoView({ behavior: 'smooth' });
         } else {
             showNotification('Selecteer minimaal één trefwoord.', 'warning');
@@ -800,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultsPerPage = type === 'jurisprudence' ? jurisprudenceResultsPerPage : wettenbankResultsPerPage;
         let html = `<div class="pagination-controls">
             <button data-type="${type}" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>← Vorige</button>
-            <span class="page-indicator">Pagina <input type="number" class="page-input" value="${currentPage}" min="1" max="${totalPages}" data-type="${type}" data-total-pages="${totalPages}"> van ${totalPages}</span>
+            <span class="page-indicator">Pagina <input type="number" class="page-input" value="${currentPage}" min="1" max="${totalPages}" data-type="${type}"> van ${totalPages}</span>
             <button data-type="${type}" data-page="${currentPage + 1}" ${currentPage >= totalPages ? 'disabled' : ''}>Volgende →</button>
         </div>`;
         const startResult = (currentPage - 1) * resultsPerPage + 1;
@@ -811,62 +649,37 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const changePage = (type, page) => {
         page = parseInt(page, 10);
-        if (isNaN(page) || page < 1) page = 1;
+        if (isNaN(page)) return;
 
         if (type === 'jurisprudence') {
             const totalPages = Math.ceil(jurisprudenceCurrentResults.length / jurisprudenceResultsPerPage);
-             if (page > totalPages) page = totalPages;
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
             jurisprudenceCurrentPage = page;
             renderJurisprudenceResults();
-            elements.jurisprudenceResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
         } else if (type === 'wettenbank') {
             const totalPages = Math.ceil(wettenbankTotalResults / wettenbankResultsPerPage);
+             if (page < 1) page = 1;
             if (page > totalPages) page = totalPages;
             wettenbankCurrentPage = page;
             handleWettenbankSearch(false);
-            elements.wettenbankResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
 
-    const handlePaginationClick = (event) => {
-        if (event.target.tagName === 'BUTTON') {
-            const type = event.target.dataset.type;
-            const page = parseInt(event.target.dataset.page, 10);
-            if (type && !isNaN(page)) changePage(type, page);
-        }
+    const handlePaginationClick = (e) => {
+        if (e.target.tagName === 'BUTTON') changePage(e.target.dataset.type, e.target.dataset.page);
     };
-    
-    const handlePageInputChange = (event) => {
-        if (event.target.classList.contains('page-input')) {
-            const type = event.target.dataset.type;
-            const totalPages = parseInt(event.target.dataset.totalPages, 10);
-            let page = parseInt(event.target.value, 10);
-            if (isNaN(page) || page < 1) page = 1;
-            if (page > totalPages) page = totalPages;
-            event.target.value = page;
-            changePage(type, page);
-        }
+    const handlePageInputChange = (e) => {
+        if (e.target.classList.contains('page-input')) changePage(e.target.dataset.type, e.target.value);
     };
 
     // --- UTILITIES & STATE MANAGEMENT ---
     const handleResultsClick = (e) => {
         const target = e.target;
-        const action = target.dataset.action;
-
-        if (!action) {
-             const searchLawsButton = e.target.closest('.search-related-laws-button');
-             if (searchLawsButton) {
-                 showKeywordModal(decodeURIComponent(searchLawsButton.dataset.summary));
-             }
-             return;
-        }
-
-        const resultItem = target.closest('.result-item');
-        if (!resultItem) return;
-
-        if (action === 'toggle-summary') {
-            const summaryDiv = resultItem.querySelector('.summary');
+        if (target.closest('.search-related-laws-button')) {
+            showKeywordModal(decodeURIComponent(target.closest('.search-related-laws-button').dataset.summary));
+        } else if (target.dataset.action === 'toggle-summary') {
+            const summaryDiv = target.closest('.result-item').querySelector('.summary');
             const isExpanded = summaryDiv.classList.toggle('expanded');
             target.textContent = isExpanded ? 'Lees minder...' : 'Lees meer...';
         }
@@ -876,9 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.loadingIndicator.style.display = show ? 'flex' : 'none'; 
         if (isNewSearch) {
             elements.apiSearchButton.disabled = show;
-            elements.apiSearchButton.innerHTML = show 
-                ? '<span class="spinner-small"></span> Zoeken...' 
-                : '<span class="button-icon"></span> Zoek uitspraken';
+            elements.apiSearchButton.innerHTML = show ? '<span class="spinner-small"></span> Zoeken...' : '<span class="button-icon"></span> Zoek uitspraken';
         }
     };
 
@@ -902,25 +713,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const displayActiveFilters = () => {
         let html = '<span>Actieve filters:</span>';
         let hasFilters = false;
-        
-        const addTag = (value) => {
-            hasFilters = true;
-            return `<div class="active-filter-tag">${value}</div>`;
-        };
-
-        const creatorName = elements.creator.value.trim();
-        if (creatorName) html += addTag(`Instantie: ${creatorName}`);
-
-        const subjectText = elements.subject.options[elements.subject.selectedIndex].text;
-        if (elements.subject.value) html += addTag(`Rechtsgebied: ${subjectText}`);
-        
-        const procedureText = elements.procedure.options[elements.procedure.selectedIndex].text;
-        if (elements.procedure.value) html += addTag(`Procedure: ${procedureText}`);
-
-        if (elements.dateFrom.value && elements.dateTo.value) {
-            html += addTag(`Periode: ${elements.dateFrom.value} tot ${elements.dateTo.value}`);
-        }
-        
+        const addTag = (value) => { hasFilters = true; return `<div class="active-filter-tag">${value}</div>`; };
+        if (elements.creator.value.trim()) html += addTag(`Instantie: ${elements.creator.value.trim()}`);
+        if (elements.subject.value) html += addTag(`Rechtsgebied: ${elements.subject.options[elements.subject.selectedIndex].text}`);
+        if (elements.dateFrom.value && elements.dateTo.value) html += addTag(`Periode: ${elements.dateFrom.value} tot ${elements.dateTo.value}`);
         elements.activeFilters.innerHTML = hasFilters ? html : '';
     };
 
@@ -928,15 +724,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') { 
             e.preventDefault(); 
-            if (elements.keywordSearchSection.classList.contains('hidden')) {
-                elements.apiSearchButton.focus();
-            } else {
-                elements.keywordSearchInput.focus(); 
-            }
+            elements.refineFiltersSection.classList.contains('hidden') ? elements.apiSearchButton.focus() : elements.keywordSearchInput.focus(); 
         }
         if (e.key === 'Escape') { 
             if (elements.keywordModal.style.display === 'flex') hideKeywordModal();
-            else { elements.creatorSuggestions.innerHTML = ''; document.activeElement.blur(); }
         }
     });
     
